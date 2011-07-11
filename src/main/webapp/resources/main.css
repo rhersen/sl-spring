@@ -1,0 +1,182 @@
+body {
+    background: darkslategray;
+}
+
+body.pending {
+    background: black;
+}
+
+body.error {
+    background: maroon;
+}
+
+a:link, a:visited, a:hover {
+    color: white;
+    font-size: 48px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+h1 {
+    color: red;
+    font-weight: normal;
+    font-size: 16px;
+    margin: .8em 0 .3em 0;
+}
+
+p {
+    color: yellow;
+    font-weight: normal;
+}
+
+h2 {
+    color: cyan;
+}
+
+h3 {
+    color: cyan;
+}
+
+span {
+    font: 40px verdana, arial, helvetica, sans-serif;
+    color: cyan;
+}
+
+body.pending span {
+    font-style: italic;
+}
+
+label {
+    font: 32px verdana, arial, helvetica, sans-serif;
+    color: cyan;
+}
+
+ul {
+    padding-left: 15px;
+}
+
+input, select, textarea {
+    background-color: #fcfcfc;
+    border: 1px solid #ccc;
+    font: 11px verdana, arial, helvetica, sans-serif;
+    margin: 2px 0;
+    padding: 2px 4px;
+}
+select {
+   padding: 2px 2px 2px 0;
+}
+textarea {
+	width: 250px;
+	height: 150px;
+	vertical-align: top;
+}
+
+input:focus, select:focus, textarea:focus {
+    border: 1px solid #b2d1ff;
+}
+
+.body {
+    float: left;
+    margin: 0 15px 10px 15px;
+}
+
+/* MESSAGES AND ERRORS */
+
+.message {
+    background: #f3f8fc url(../images/skin/information.png) 8px 50% no-repeat;
+    border: 1px solid #b2d1ff;
+    color: #006dba;
+    margin: 10px 0 5px 0;
+    padding: 5px 5px 5px 30px
+}
+
+div.errors {
+    background: #fff3f3;
+    border: 1px solid red;
+    color: #cc0000;
+    margin: 10px 0 5px 0;
+    padding: 5px 0 5px 0;
+}
+div.errors ul {
+    list-style: none;
+    padding: 0;
+}
+div.errors li {
+	background: url(../images/skin/exclamation.png) 8px no-repeat;
+    line-height: 16px;
+    padding-left: 30px;
+}
+
+td.errors select {
+    border: 1px solid red;
+}
+td.errors input {
+    border: 1px solid red;
+}
+
+/* TABLES */
+
+table {
+    border: 1px solid #ccc;
+    width: 100%;
+}
+tr.delayed {
+    border: 0;
+    color: orange;
+}
+tr {
+    border: 0;
+    color: white;
+}
+td.countdown {
+    text-align: right;
+}
+td, th {
+    font: 24px verdana, arial, helvetica, sans-serif;
+    text-align: left;
+    vertical-align: top;
+}
+th {
+    background: #fff url(../images/skin/shadow.jpg);
+    color: #666;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 17px;
+    padding: 2px 6px;
+}
+th a:link, th a:visited, th a:hover {
+    color: #333;
+    display: block;
+    font-size: 10px;
+    text-decoration: none;
+    width: 100%;
+}
+th.asc a, th.desc a {
+    background-position: right;
+    background-repeat: no-repeat;
+}
+th.asc a {
+    background-image: url(../images/skin/sorted_asc.gif);
+}
+th.desc a {
+    background-image: url(../images/skin/sorted_desc.gif);
+}
+
+.odd {
+    background: #f7f7f7;
+}
+.even {
+    background: #fff;
+}
+
+/* LIST */
+
+.list table {
+    border-collapse: collapse;
+}
+.list th, .list td {
+    border-left: 1px solid #ddd;
+}
+.list th:hover, .list tr:hover {
+    background: #b2d1ff;
+}
