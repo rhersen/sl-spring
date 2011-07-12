@@ -8,11 +8,11 @@
       <meta name="viewport"
             content="width=device-width, height=device-height, user-scalable=no"/>
       <title>station</title>
-      <link rel="stylesheet" href="/resources/main.css"/>
+      <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/main.css"/>
 
-      <script type="text/javascript" src="/resources/jquery-1.6.1.min.js" ></script>
-      <script type="text/javascript" src="/resources/timecalc.js" ></script>
-      <script type="text/javascript" src="/resources/station.js" ></script>
+      <script type="text/javascript" src="${pageContext.request.contextPath}/resources/jquery-1.6.1.min.js" ></script>
+      <script type="text/javascript" src="${pageContext.request.contextPath}/resources/timecalc.js" ></script>
+      <script type="text/javascript" src="${pageContext.request.contextPath}/resources/station.js" ></script>
   </head>
 
   <body id="bg" onload="init(${id}, '${direction}');">

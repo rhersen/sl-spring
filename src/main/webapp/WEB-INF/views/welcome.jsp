@@ -8,7 +8,7 @@
     <meta http-equiv="Content-type" content="text/html;charset=ISO-8859-1"/>
     <meta name="HandheldFriendly" content="true"/>
     <title>sl</title>
-    <link rel="stylesheet" href="/resources/main.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/main.css"/>
     <meta name="layout" content="main"/>
 </head>
 <body>
@@ -16,11 +16,11 @@
 <div id="pageBody">
     <div class="dialog">
         <ol>
-            <li class="controller"><a href="station/dynamic?id=9525&direction=n">Tullinge</a></li>
-            <li class="controller"><a href="station/dynamic?id=9001&direction=s">Centralen</a></li>
-            <li class="controller"><a href="station/dynamic?id=9510&direction=s">Karlberg</a></li>
-            <li class="controller"><a href="station/dynamic?id=9529&direction=ns">Älvsjö</a></li>
-            <li class="controller"><a href="station/dynamic?id=9702&direction=s">Jakobsberg</a></li>
+            <li class="controller"><a href="${pageContext.request.contextPath}/station/dynamic?id=9525&direction=n">Tullinge</a></li>
+            <li class="controller"><a href="${pageContext.request.contextPath}/station/dynamic?id=9001&direction=s">Centralen</a></li>
+            <li class="controller"><a href="${pageContext.request.contextPath}/station/dynamic?id=9510&direction=s">Karlberg</a></li>
+            <li class="controller"><a href="${pageContext.request.contextPath}/station/dynamic?id=9529&direction=ns">Älvsjö</a></li>
+            <li class="controller"><a href="${pageContext.request.contextPath}/station/dynamic?id=9702&direction=s">Jakobsberg</a></li>
         </ol>
     </div>
 </div>
