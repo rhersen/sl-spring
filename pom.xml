@@ -123,6 +123,13 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warName>${artifactId}</warName>
+                </configuration>
+            </plugin>
+        </plugins>
 	</build>
 </project>
