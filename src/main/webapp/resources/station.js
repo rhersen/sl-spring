@@ -100,7 +100,7 @@ function updatePage(data) {
 
 function setStation(id) {
     function getAjaxUrl() {
-        return "/station/departures?id=" + stationId + "&direction=" + getDirection();
+        return "station/departures?id=" + stationId + "&direction=" + getDirection();
     }
 
     function handleSuccess(data, status) {
