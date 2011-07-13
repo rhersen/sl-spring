@@ -51,7 +51,7 @@ public class Parser {
 
     private boolean isNorthbound(Collection<Departure> departures) {
         for (Departure departure : departures) {
-            if (departure.getDestination().equals("Bålsta") || departure.getDestination().equals("Märsta")) {
+            if (departure.getDestination().endsWith("lsta") || departure.getDestination().endsWith("rsta")) {
                 return true;
             }
         }
