@@ -2,6 +2,7 @@ package se.cygni.ruhe.sl;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Collections;
 
 public class Departures {
     private String updated;
@@ -20,6 +21,14 @@ public class Departures {
         r.addAll(northbound);
         r.addAll(southbound);
         this.departures = r;
+    }
+
+    public Departures(String updated, String stationName) {
+        this.updated = updated;
+        this.stationName = stationName;
+        this.northbound = Collections.emptyList();
+        this.southbound = Collections.emptyList();
+        this.departures = Collections.emptyList();
     }
 
     public String getUpdated() {

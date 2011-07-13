@@ -26,13 +26,18 @@ public class Parser {
         Node bold = startDiv.getFirstChild();
         Node updated = startDiv.getNextSibling().getFirstChild();
         Node realtimeResult = updated.getNextSibling().getNextSibling().getNextSibling();
-        Node n1 = findTrain(realtimeResult).getNextSibling().getNextSibling();
+        Node train = findTrain(realtimeResult);
+        if (train == null) {
+            return new Departures(getMatch(updated, updatedAt), getMatch(bold, stationName));
+        }
+
+        Node n1 = train.getNextSibling().getNextSibling();
         Node n2 = n1.getNextSibling().getNextSibling();
         Collection<Departure> d1 = getDepartures(n1);
         Collection<Departure> d2 = getDepartures(n2);
+
         Collection<Departure> northbound;
         Collection<Departure> southbound;
-
         if (isNorthbound(d1)) {
             northbound = d1;
             southbound = d2;
