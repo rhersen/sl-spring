@@ -71,7 +71,7 @@
             <artifactId>nekohtml</artifactId>
             <version>1.9.14</version>
         </dependency>
-		
+
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -129,6 +129,13 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <warName>${artifactId}</warName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>-Dfile.encoding=utf8</argLine>
                 </configuration>
             </plugin>
         </plugins>
