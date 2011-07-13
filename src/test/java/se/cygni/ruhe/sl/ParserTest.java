@@ -1,10 +1,7 @@
-package sl;
+package se.cygni.ruhe.sl;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.cygni.ruhe.sl.Departure;
-import se.cygni.ruhe.sl.Departures;
-import se.cygni.ruhe.sl.Parser;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
