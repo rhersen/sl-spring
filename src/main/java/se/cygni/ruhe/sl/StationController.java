@@ -38,4 +38,9 @@ public class StationController {
         return new Parser().parse(new InputStreamReader(url.openStream(), "UTF-8"));
     }
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String getNothing(Model model) throws IOException, SAXException {
+        return "test";
+    }
+
 }
