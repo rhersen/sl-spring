@@ -1,6 +1,7 @@
 package se.cygni.ruhe.sl;
 
 import org.cyberneko.html.parsers.DOMParser;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -14,6 +15,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class Parser {
     private final Pattern stationName = Pattern.compile(".*Pendeltåg, (\\S+ ?\\S*).*", Pattern.DOTALL);
     private final Pattern updatedAt = Pattern.compile(".*Uppdaterat kl (.?.:..).*", Pattern.DOTALL);
@@ -49,7 +51,7 @@ public class Parser {
                 return true;
             }
         }
-        
+
         return false;
     }
 

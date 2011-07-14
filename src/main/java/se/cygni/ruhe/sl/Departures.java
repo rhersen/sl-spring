@@ -1,6 +1,6 @@
 package se.cygni.ruhe.sl;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -17,7 +17,7 @@ public class Departures {
         this.stationName = stationName;
         this.northbound = northbound;
         this.southbound = southbound;
-        Collection<Departure> r = new ArrayDeque<Departure>();
+        Collection<Departure> r = new ArrayList<Departure>();
         r.addAll(northbound);
         r.addAll(southbound);
         this.departures = r;
