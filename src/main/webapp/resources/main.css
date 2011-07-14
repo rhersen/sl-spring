@@ -38,7 +38,7 @@ h3 {
 }
 
 span {
-    font: 40px verdana, arial, helvetica, sans-serif;
+    font: 36px verdana, arial, helvetica, sans-serif;
     color: cyan;
 }
 
@@ -82,14 +82,6 @@ input:focus, select:focus, textarea:focus {
 
 /* MESSAGES AND ERRORS */
 
-.message {
-    background: #f3f8fc url(../images/skin/information.png) 8px 50% no-repeat;
-    border: 1px solid #b2d1ff;
-    color: #006dba;
-    margin: 10px 0 5px 0;
-    padding: 5px 5px 5px 30px
-}
-
 div.errors {
     background: #fff3f3;
     border: 1px solid red;
@@ -100,11 +92,6 @@ div.errors {
 div.errors ul {
     list-style: none;
     padding: 0;
-}
-div.errors li {
-	background: url(../images/skin/exclamation.png) 8px no-repeat;
-    line-height: 16px;
-    padding-left: 30px;
 }
 
 td.errors select {
@@ -136,14 +123,7 @@ td, th {
     text-align: left;
     vertical-align: top;
 }
-th {
-    background: #fff url(../images/skin/shadow.jpg);
-    color: #666;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 17px;
-    padding: 2px 6px;
-}
+
 th a:link, th a:visited, th a:hover {
     color: #333;
     display: block;
@@ -152,14 +132,7 @@ th a:link, th a:visited, th a:hover {
     width: 100%;
 }
 th.asc a, th.desc a {
-    background-position: right;
-    background-repeat: no-repeat;
-}
-th.asc a {
-    background-image: url(../images/skin/sorted_asc.gif);
-}
-th.desc a {
-    background-image: url(../images/skin/sorted_desc.gif);
+    background: no-repeat right;
 }
 
 .odd {

@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser {
-    private final Pattern stationName = Pattern.compile("(\\w+) \\(\\w+\\)");
+    private final Pattern stationName = Pattern.compile(".*Pendeltåg, (\\S+ ?\\S*).*", Pattern.DOTALL);
     private final Pattern updatedAt = Pattern.compile(".*Uppdaterat kl (.?.:..).*", Pattern.DOTALL);
     private final Pattern departureTime = Pattern.compile(".*(..:..).*", Pattern.DOTALL);
 
@@ -23,30 +23,24 @@ public class Parser {
         DOMParser neko = new DOMParser();
         neko.parse(new InputSource(html));
         Node startDiv = getStartDiv(neko);
-        Node bold = startDiv.getFirstChild();
         Node updated = startDiv.getNextSibling().getFirstChild();
+        String when = getMatch(updated, updatedAt);
         Node realtimeResult = updated.getNextSibling().getNextSibling().getNextSibling();
         Node train = findTrain(realtimeResult);
+
         if (train == null) {
-            return new Departures(getMatch(updated, updatedAt), getMatch(bold, stationName));
+            return new Departures(when, startDiv.getFirstChild().getTextContent());
         }
+
+        String where = getMatch(train, stationName);
 
         Node n1 = train.getNextSibling().getNextSibling();
         Node n2 = n1.getNextSibling().getNextSibling();
         Collection<Departure> d1 = getDepartures(n1);
         Collection<Departure> d2 = getDepartures(n2);
+        boolean isNorthFirst = isNorthbound(d1);
 
-        Collection<Departure> northbound;
-        Collection<Departure> southbound;
-        if (isNorthbound(d1)) {
-            northbound = d1;
-            southbound = d2;
-        } else {
-            northbound = d2;
-            southbound = d1;
-        }
-
-        return new Departures(getMatch(updated, updatedAt), getMatch(bold, stationName), northbound, southbound);
+        return new Departures(when, where, isNorthFirst ? d1 : d2, isNorthFirst ? d2 : d1);
     }
 
     private boolean isNorthbound(Collection<Departure> departures) {

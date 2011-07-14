@@ -96,13 +96,20 @@ public class ParserTest {
         InputStream stream = getClass().getResourceAsStream("/no-trains.html");
         Departures parsed = new Parser().parse(new InputStreamReader(stream, "UTF-8"));
         assertEquals("0:50", parsed.getUpdated());
-        assertEquals("Stuvsta", parsed.getStationName());
+        assertTrue(parsed.getStationName().contains("Stuvsta"));
 
         Collection<Departure> southbound = parsed.getSouthbound();
         assertEquals(0, southbound.size());
 
         Collection<Departure> northbound = parsed.getNorthbound();
         assertEquals(0, northbound.size());
+    }
+
+    @Test
+    public void shouldHandleSpaceInStationName() throws Exception {
+        InputStream stream = getClass().getResourceAsStream("/sodra.html");
+        Departures parsed = new Parser().parse(new InputStreamReader(stream, "UTF-8"));
+        assertEquals("Stockholms södra", parsed.getStationName());
     }
 
 }
