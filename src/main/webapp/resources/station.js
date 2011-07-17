@@ -89,12 +89,23 @@ function updatePage(data) {
 
     $('#departures tr').remove();
 
+    var isNorthbound2 = isNorthbound();
+    var isSouthbound2 = isSouthbound();
+
+    if (!isNorthbound2 && !isSouthbound2) {
+        isNorthbound2 = true;
+        isSouthbound2 = true;
+    }
+
     $(data.departures).each(function (i, departure) {
-        var row = $('<tr/>').appendTo($('#departures'));
-        row.addClass(getDelayed(departure.delayed));
-        $('<td/>').appendTo(row).html(departure.time);
-        $('<td/>').appendTo(row).html(departure.destination);
-        $('<td/>').appendTo(row).html('countdown').addClass('countdown');
+        if ((isNorthbound2 && departure.direction === 'n') ||
+                (isSouthbound2 && departure.direction === 's')) {
+            var row = $('<tr/>').appendTo($('#departures'));
+            row.addClass(getDelayed(departure.delayed));
+            $('<td/>').appendTo(row).html(departure.time);
+            $('<td/>').appendTo(row).html(departure.destination);
+            $('<td/>').appendTo(row).html('countdown').addClass('countdown');
+        }
     });
 }
 

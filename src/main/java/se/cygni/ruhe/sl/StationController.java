@@ -12,7 +12,6 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Collections;
 
 @Controller
 @RequestMapping(value = "/station")
@@ -43,17 +42,7 @@ public class StationController {
     @ResponseBody
     Departures getJson(@RequestParam String id, @RequestParam String direction) throws IOException, SAXException {
         URL url = new URL("http://mobilrt.sl.se/?tt=TRAIN&SiteId=" + id);
-        Departures parsed = parser.parse(new InputStreamReader(url.openStream(), "UTF-8"));
-        return filter(parsed, direction);
-    }
-
-    public Departures filter(Departures parsed, String direction) {
-        boolean n = direction.contains("n") || direction.isEmpty();
-        boolean s = direction.contains("s") || direction.isEmpty();
-
-        return new Departures(parsed.getUpdated(), parsed.getStationName(),
-                n ? parsed.getNorthbound(): Collections.<Departure>emptyList(),
-                s ? parsed.getSouthbound(): Collections.<Departure>emptyList());
+        return parser.parse(new InputStreamReader(url.openStream(), "UTF-8"));
     }
 
     @SuppressWarnings({"UnusedParameters"})

@@ -41,8 +41,18 @@ public class Parser {
         Collection<Departure> d1 = getDepartures(n1);
         Collection<Departure> d2 = getDepartures(n2);
         boolean isNorthFirst = isNorthbound(d1);
+        Collection<Departure> northbound = isNorthFirst ? d1 : d2;
+        Collection<Departure> southbound = isNorthFirst ? d2 : d1;
 
-        return new Departures(when, where, isNorthFirst ? d1 : d2, isNorthFirst ? d2 : d1);
+        for (Departure departure : northbound) {
+            departure.setDirection("n");
+        }
+
+        for (Departure departure : southbound) {
+            departure.setDirection("s");
+        }
+
+        return new Departures(when, where, northbound, southbound);
     }
 
     private boolean isNorthbound(Collection<Departure> departures) {
@@ -94,7 +104,7 @@ public class Parser {
             if (delayed) {
                 time = getMatch(nextSibling, departureTime);
             }
-            r.add(new Departure(time, destination, delayed));
+            r.add(new Departure(time, destination, delayed, null));
         }
         return r;
     }

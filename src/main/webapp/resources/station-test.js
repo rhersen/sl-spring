@@ -93,9 +93,9 @@ function tests() {
         rows = $('#departures tr');
         equals(rows.size(), 2, "table should contain two rows before update");
         updatePage({"updated":"22:10","stationName":"Tullinge","departures":[
-                    {"time":"22:26","destination":"Märsta","delayed":false,"millis":1560000},
-                    {"time":"22:56","destination":"Märsta","delayed":false,"millis":3360000},
-                    {"time":"23:28;","destination":"Märsta","delayed":true,"millis":1560000}
+                    {"time":"22:26","destination":"Märsta","delayed":false,"direction":"n","millis":1560000},
+                    {"time":"22:56","destination":"Märsta","delayed":false,"direction":"n","millis":3360000},
+                    {"time":"23:28;","destination":"Märsta","delayed":true,"direction":"n","millis":1560000}
                 ]});
         rows = $('#departures tr');
         equals(rows.size(), 3, "table should contain three rows after update");
@@ -104,6 +104,34 @@ function tests() {
         equals($('#departures tr:first td:first').html(), "22:26", "first cell should be departure time");
         equals($('#departures tr:first td:eq(1)').html(), "Märsta", "second cell should be destination");
         equals($('#departures tr:first td:last').html(), "countdown", "last cell should be countdown");
+    });
+
+    test("filterDirection", function() {
+        var rows;
+        rows = $('#departures tr');
+        equals(rows.size(), 2, "table should contain two rows before update");
+        var data = {"departures":[
+            {"time":"23:56","destination":"Märsta","delayed":false,"direction":"n"},
+            {"time":"00:26","destination":"Märsta","delayed":false,"direction":"n"},
+            {"time":"00:56","destination":"Märsta","delayed":false,"direction":"n"},
+            {"time":"00:07","destination":"Södertälje hamn","delayed":true,"direction":"s"},
+            {"time":"00:33","destination":"Södertälje hamn","delayed":false,"direction":"s"}
+        ],"updated":"23:56","stationName":"Tullinge"};
+        updatePage(data);
+        rows = $('#departures tr');
+        equals(rows.size(), 5, "table should contain five rows after update");
+
+        $("#northbound").prop("checked", true);
+        $("#southbound").prop("checked", false);
+        updatePage(data);
+        rows = $('#departures tr');
+        equals(rows.size(), 3, "table should contain three northbound rows");
+
+        $("#northbound").prop("checked", false);
+        $("#southbound").prop("checked", true);
+        updatePage(data);
+        rows = $('#departures tr');
+        equals(rows.size(), 2, "table should contain three southbound rows");
     });
 
 }

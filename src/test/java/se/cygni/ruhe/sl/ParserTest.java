@@ -23,18 +23,11 @@ public class ParserTest {
         assertEquals("23:18", parsed.getUpdated());
         assertEquals("Flemingsberg", parsed.getStationName());
 
-        Collection<Departure> southbound = parsed.getSouthbound();
-        assertEquals(2, southbound.size());
-        Iterator<Departure> iterator = southbound.iterator();
-        Departure departure = iterator.next();
-        assertEquals("23:30", departure.getTime());
-        assertEquals("Södertälje hamn", departure.getDestination());
-        assertEquals("00:00", iterator.next().getTime());
 
-        Collection<Departure> northbound = parsed.getNorthbound();
-        assertEquals(2, northbound.size());
-        iterator = northbound.iterator();
-        departure = iterator.next();
+        Collection<Departure> northbound = parsed.getDepartures();
+        assertEquals(4, northbound.size());
+        Iterator<Departure> iterator = northbound.iterator();
+        Departure departure = iterator.next();
         assertEquals("23:29", departure.getTime());
         assertEquals("Märsta", departure.getDestination());
         assertEquals("23:59", iterator.next().getTime());
@@ -47,18 +40,11 @@ public class ParserTest {
         assertEquals("22:10", parsed.getUpdated());
         assertEquals("Stuvsta", parsed.getStationName());
 
-        Collection<Departure> southbound = parsed.getSouthbound();
-        assertEquals(2, southbound.size());
-        Iterator<Departure> iterator = southbound.iterator();
-        Departure departure = iterator.next();
-        assertEquals("22:24", departure.getTime());
-        assertEquals("Södertälje hamn", departure.getDestination());
-        assertEquals("22:54", iterator.next().getTime());
 
-        Collection<Departure> northbound = parsed.getNorthbound();
-        assertEquals(2, northbound.size());
-        iterator = northbound.iterator();
-        departure = iterator.next();
+        Collection<Departure> northbound = parsed.getDepartures();
+        assertEquals(4, northbound.size());
+        Iterator<Departure> iterator = northbound.iterator();
+        Departure departure = iterator.next();
         assertEquals("22:35", departure.getTime());
         assertEquals("Märsta", departure.getDestination());
         assertEquals("23:05", iterator.next().getTime());
@@ -71,21 +57,11 @@ public class ParserTest {
         assertEquals("22:26", parsed.getUpdated());
         assertEquals("Huddinge", parsed.getStationName());
 
-        Collection<Departure> southbound = parsed.getSouthbound();
-        assertEquals(2, southbound.size());
-        Iterator<Departure> iterator = southbound.iterator();
-        Departure departure = iterator.next();
-        assertTrue(departure.isDelayed());
-        assertEquals("22:30", departure.getTime());
-        assertEquals("Södertälje hamn", departure.getDestination());
-        departure = iterator.next();
-        assertEquals("22:57", departure.getTime());
-        assertFalse(departure.isDelayed());
 
-        Collection<Departure> northbound = parsed.getNorthbound();
-        assertEquals(2, northbound.size());
-        iterator = northbound.iterator();
-        departure = iterator.next();
+        Collection<Departure> northbound = parsed.getDepartures();
+        assertEquals(4, northbound.size());
+        Iterator<Departure> iterator = northbound.iterator();
+        Departure departure = iterator.next();
         assertEquals("22:32", departure.getTime());
         assertEquals("Märsta", departure.getDestination());
         assertEquals("23:02", iterator.next().getTime());
@@ -98,10 +74,10 @@ public class ParserTest {
         assertEquals("0:50", parsed.getUpdated());
         assertTrue(parsed.getStationName().contains("Stuvsta"));
 
-        Collection<Departure> southbound = parsed.getSouthbound();
+        Collection<Departure> southbound = parsed.getDepartures();
         assertEquals(0, southbound.size());
 
-        Collection<Departure> northbound = parsed.getNorthbound();
+        Collection<Departure> northbound = parsed.getDepartures();
         assertEquals(0, northbound.size());
     }
 

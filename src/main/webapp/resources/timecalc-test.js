@@ -79,6 +79,8 @@ function tests() {
             equals(getMillisSinceRefresh(createTimeMock(3600000, 60), 0), 0);
             equals(getMillisSinceRefresh(createTimeMock(3660000, 60), 0),
                    60000);
+            equals(getMillisSinceRefresh(createTimeMock(1310854593304, -120), 240000),
+                   753304);
             equals(getMillisSinceRefresh(createTimeMock(2 * 60 * 60 * 1000, 0),
                                          60 * 60 * 1000),
                    60 * 60 * 1000);

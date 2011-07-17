@@ -45,8 +45,9 @@ function getCountdown(hhmm, currentTimeMillis)   {
 }
 
 function getMillisSinceRefresh(currentDate, refreshMillis) {
-    var currentMillis = currentDate.getTime() % MILLIS_PER_DAY - (currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE);
-    var millis = currentMillis - refreshMillis;
+    var currentMillis = currentDate.getTime() - (currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE);
+    var currentMillisToday = currentMillis % MILLIS_PER_DAY;
+    var millis = currentMillisToday - refreshMillis;
 
     if (millis < 0) {
         return millis + MILLIS_PER_DAY;
