@@ -36,33 +36,15 @@ public class Parser {
 
         String where = getMatch(train, stationName);
 
-        Node n1 = train.getNextSibling().getNextSibling();
-        Node n2 = n1.getNextSibling().getNextSibling();
-        Collection<Departure> d1 = getDepartures(n1);
-        Collection<Departure> d2 = getDepartures(n2);
-        boolean isNorthFirst = isNorthbound(d1);
-        Collection<Departure> northbound = isNorthFirst ? d1 : d2;
-        Collection<Departure> southbound = isNorthFirst ? d2 : d1;
-
-        for (Departure departure : northbound) {
-            departure.setDirection("n");
-        }
-
-        for (Departure departure : southbound) {
-            departure.setDirection("s");
-        }
-
-        return new Departures(when, where, northbound, southbound);
+        return new Departures(when, where, getTrainDepartures(train));
     }
 
-    private boolean isNorthbound(Collection<Departure> departures) {
-        for (Departure departure : departures) {
-            if (departure.getDestination().endsWith("lsta") || departure.getDestination().endsWith("rsta")) {
-                return true;
-            }
-        }
-
-        return false;
+    private Node getStartDiv(DOMParser neko) {
+        Document document = neko.getDocument();
+        return document.getFirstChild().getNextSibling().getFirstChild().getNextSibling().getFirstChild()
+                .getFirstChild().getNextSibling().getNextSibling().getNextSibling()
+                .getFirstChild().getFirstChild().getFirstChild().getNextSibling().getNextSibling().getFirstChild()
+                .getNextSibling().getNextSibling().getNextSibling().getFirstChild();
     }
 
     private Node findTrain(Node realtimeResult) {
@@ -82,29 +64,59 @@ public class Parser {
         return null;
     }
 
-    private Node getStartDiv(DOMParser neko) {
-        Document document = neko.getDocument();
-        return document.getFirstChild().getNextSibling().getFirstChild().getNextSibling().getFirstChild()
-                .getFirstChild().getNextSibling().getNextSibling().getNextSibling()
-                .getFirstChild().getFirstChild().getFirstChild().getNextSibling().getNextSibling().getFirstChild()
-                .getNextSibling().getNextSibling().getNextSibling().getFirstChild();
+    private Collection<Departure> getTrainDepartures(Node train) {
+        Collection<Departure> r = new ArrayDeque<Departure>();
+        Collection<String[]> d1 = getOneHalfOfTheDepartures(train);
+        Collection<String[]> d2 = getOtherHalfOfTheDepartures(train);
+        boolean isNorthFirst = isNorthbound(d1);
+
+        for (String[] departure : d1) {
+            r.add(createDeparture(departure, isNorthFirst ? "n" : "s"));
+        }
+
+        for (String[] departure : d2) {
+            r.add(createDeparture(departure, isNorthFirst ? "s" : "n"));
+        }
+
+        return r;
     }
 
-    private Collection<Departure> getDepartures(Node node) {
+    private Collection<String[]> getOneHalfOfTheDepartures(Node train) {
+        return getDepartures(train.getNextSibling().getNextSibling());
+    }
+
+    private Collection<String[]> getOtherHalfOfTheDepartures(Node train) {
+        return getDepartures(train.getNextSibling().getNextSibling().getNextSibling().getNextSibling());
+    }
+
+    private boolean isNorthbound(Collection<String[]> departures) {
+        for (String[] departure : departures) {
+            if (departure[1].endsWith("lsta") || departure[1].endsWith("rsta")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private Departure createDeparture(String[] d, String direction) {
+        return new Departure(d[0], d[1], d[2].length() > 1, direction);
+    }
+
+    private Collection<String[]> getDepartures(Node node) {
         Node firstChild = node.getFirstChild();
         NodeList childNodes = firstChild.getChildNodes();
-        Collection<Departure> r = new ArrayDeque<Departure>();
+        Collection<String[]> r = new ArrayDeque<String[]>();
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node item = childNodes.item(i);
             String time = getMatch(item.getFirstChild(), departureTime);
             String destination = item.getFirstChild().getNextSibling().getTextContent().trim();
             Node nextSibling = item.getFirstChild().getNextSibling().getNextSibling();
-            String s = nextSibling.getTextContent().trim();
-            boolean delayed = s.length() > 1;
-            if (delayed) {
+            String delayedTime = nextSibling.getTextContent().trim();
+            if (delayedTime.length() > 1) {
                 time = getMatch(nextSibling, departureTime);
             }
-            r.add(new Departure(time, destination, delayed, null));
+            r.add(new String[]{time, destination, delayedTime});
         }
         return r;
     }

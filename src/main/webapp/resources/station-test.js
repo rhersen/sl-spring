@@ -26,38 +26,34 @@ function tests() {
     });
 
     test("getDirection", function() {
-        ok(!isNorthbound(), "no checkboxes set");
-        ok(!isSouthbound(), "no checkboxes set");
         equals(getDirection(), "ns", "no checkboxes set");
 
         $("#northbound").prop("checked", true);
-        ok(isNorthbound(), "north set");
-        ok(!isSouthbound(), "north set");
+        ok(isNorthChecked(), "north set");
+        ok(!isSouthChecked(), "north set");
         equals(getDirection(), "n", "north set");
-        ok(isNorthbound(), "both checkboxes set");
+        ok(isNorthChecked(), "both checkboxes set");
 
         $("#southbound").prop("checked", true);
-        ok(isSouthbound(), "both checkboxes set");
+        ok(isSouthChecked(), "both checkboxes set");
         equals(getDirection(), "ns", "both checkboxes set");
 
         $("#northbound").prop("checked", false);
-        ok(!isNorthbound(), "south set");
-        ok(isSouthbound(), "south set");
+        ok(!isNorthChecked(), "south set");
+        ok(isSouthChecked(), "south set");
         equals(getDirection(), "s", "south set");
     });
 
     test("setDirection", function() {
-        ok(!isNorthbound(), "no checkboxes set");
-        ok(!isSouthbound(), "no checkboxes set");
         setDirection('n');
-        ok(isNorthbound(), "north should have been set");
-        ok(!isSouthbound(), "south should not have been set");
+        ok(isNorthChecked(), "north should have been set");
+        ok(!isSouthChecked(), "south should not have been set");
         setDirection('s');
-        ok(!isNorthbound(), "north should have been reset");
-        ok(isSouthbound(), "south should have been set");
+        ok(!isNorthChecked(), "north should have been reset");
+        ok(isSouthChecked(), "south should have been set");
         setDirection('ns');
-        ok(isNorthbound(), "north should have been set");
-        ok(isSouthbound(), "south should have been set");
+        ok(isNorthChecked(), "north should have been set");
+        ok(isSouthChecked(), "south should have been set");
     });
 
     test("millis", function() {

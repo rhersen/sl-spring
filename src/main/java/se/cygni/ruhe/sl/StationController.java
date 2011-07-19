@@ -40,7 +40,7 @@ public class StationController {
     @RequestMapping(value = "/departures", method = RequestMethod.GET)
     public
     @ResponseBody
-    Departures getJson(@RequestParam String id, @RequestParam String direction) throws IOException, SAXException {
+    Departures getJson(@RequestParam String id) throws IOException, SAXException {
         URL url = new URL("http://mobilrt.sl.se/?tt=TRAIN&SiteId=" + id);
         return parser.parse(new InputStreamReader(url.openStream(), "UTF-8"));
     }
