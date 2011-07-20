@@ -2,17 +2,17 @@ package se.cygni.ruhe.sl;
 
 public class Departure {
     private String time;
-    private String destination;
+    private String fullDestination;
     private boolean delayed;
     private String direction;
 
     public String toString() {
-        return time + " " + destination;
+        return time + " " + fullDestination;
     }
 
-    public Departure(String time, String destination, boolean delayed, String direction) {
+    public Departure(String time, String fullDestination, boolean delayed, String direction) {
         this.time = time;
-        this.destination = destination;
+        this.fullDestination = fullDestination;
         this.delayed = delayed;
         this.direction = direction;
     }
@@ -21,8 +21,8 @@ public class Departure {
         return time;
     }
 
-    public String getDestination() {
-        return destination;
+    public String getFullDestination() {
+        return fullDestination;
     }
 
     public boolean isDelayed() {
@@ -35,5 +35,17 @@ public class Departure {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public String getDestination() {
+        if (fullDestination.endsWith("amn")) {
+            return fullDestination.substring(0, fullDestination.length() - 3);
+        }
+
+        if (fullDestination.startsWith("Väster")) {
+            return "V:" + fullDestination.substring(6, fullDestination.length());
+        }
+
+        return fullDestination;
     }
 }
