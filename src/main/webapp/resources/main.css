@@ -10,6 +10,10 @@ body.error {
     background: maroon;
 }
 
+body.expired {
+    background: #b0c4de;
+}
+
 a:link, a:visited, a:hover {
     color: white;
     font-size: 48px;

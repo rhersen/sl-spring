@@ -12,14 +12,15 @@ function createStatus() {
     that.set = function (status, bg) {
         s = status;
 
+        bg.removeClass("pending");
+        bg.removeClass("error");
+        bg.removeClass("expired");
+
         if (status === "") {
             bg.addClass("pending");
-        } else {
-            bg.removeClass("pending");
-        }
-
-        if (status === "" || status === "success") {
-            bg.removeClass("error");
+        } else if (status === "expired") {
+            bg.addClass("expired");
+        } else if (status === "success") {
         } else {
             bg.addClass("error");
         }
@@ -153,6 +154,10 @@ function updateClock() {
     var millisSinceRequest = currentDate.getTime() - millis.getRequest();
     var millisSinceResponse = currentDate.getTime() - millis.getResponse();
     $('#ago').text(millisSinceUpdate + " " + millisSinceRequest + " " + millisSinceResponse + " " + responseStatus.get());
+
+    if (millisSinceUpdate > 200000) {
+        responseStatus.set("expired");
+    }
 
     if (isOutdated(millisSinceUpdate, millisSinceRequest, millisSinceResponse)) {
         setStation(stationId);

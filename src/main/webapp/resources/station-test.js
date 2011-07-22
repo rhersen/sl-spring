@@ -11,18 +11,27 @@ function tests() {
         target.set("", bg);
         ok(bg.hasClass("pending"), "empty string should mean pending");
         ok(!bg.hasClass("error"), "empty string should not mean error");
+        ok(!bg.hasClass("expired"), "empty string should not mean expired");
 
         target.set("success", bg);
         ok(!bg.hasClass("pending"), "success should not mean pending");
         ok(!bg.hasClass("error"), "success should not mean error");
+        ok(!bg.hasClass("expired"), "success should not mean expired");
 
         target.set("error", bg);
         ok(!bg.hasClass("pending"), "error should not mean pending");
         ok(bg.hasClass("error"), "error should mean error");
+        ok(!bg.hasClass("expired"), "error should not mean expired");
+
+        target.set("expired", bg);
+        ok(!bg.hasClass("pending"), "expired should not mean pending");
+        ok(!bg.hasClass("error"), "expired should not mean error");
+        ok(bg.hasClass("expired"), "expired should mean expired");
 
         target.set("no data", bg);
         ok(!bg.hasClass("pending"), "no data should not mean pending");
         ok(bg.hasClass("error"), "no data should mean error");
+        ok(!bg.hasClass("expired"), "no data should not mean expired");
     });
 
     test("getDirection", function() {
