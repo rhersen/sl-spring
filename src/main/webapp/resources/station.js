@@ -156,7 +156,7 @@ function updateClock() {
     $('#ago').text(millisSinceUpdate + " " + millisSinceRequest + " " + millisSinceResponse + " " + responseStatus.get());
 
     if (millisSinceUpdate > 200000) {
-        responseStatus.set("expired");
+        responseStatus.set("expired", $("#bg"));
     }
 
     if (isOutdated(millisSinceUpdate, millisSinceRequest, millisSinceResponse)) {
