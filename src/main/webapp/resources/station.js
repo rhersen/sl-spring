@@ -100,6 +100,10 @@ function updatePage(data) {
     });
 }
 
+function getMillisSinceUpdate() {
+    return getMillisSinceRefresh(new Date(), getMillisFromMidnight($('#updated').text()));
+}
+
 function setStation(id) {
     function getAjaxUrl() {
         return "departures?id=" + stationId + "&direction=" + getDirection();
@@ -113,7 +117,12 @@ function setStation(id) {
             return;
         }
 
+    if (getMillisSinceUpdate() > 200000) {
+        responseStatus.set("expired", $("#bg"));
+    } else {
         responseStatus.set(status, $("#bg"));
+    }
+
         updatePage(data);
     }
 
@@ -150,14 +159,10 @@ function updateClock() {
         return;
     }
 
-    var millisSinceUpdate = getMillisSinceRefresh(currentDate, getMillisFromMidnight(updated));
+    var millisSinceUpdate = getMillisSinceUpdate();
     var millisSinceRequest = currentDate.getTime() - millis.getRequest();
     var millisSinceResponse = currentDate.getTime() - millis.getResponse();
     $('#ago').text(millisSinceUpdate + " " + millisSinceRequest + " " + millisSinceResponse + " " + responseStatus.get());
-
-    if (millisSinceUpdate > 200000) {
-        responseStatus.set("expired", $("#bg"));
-    }
 
     if (isOutdated(millisSinceUpdate, millisSinceRequest, millisSinceResponse)) {
         setStation(stationId);
