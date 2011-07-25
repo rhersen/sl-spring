@@ -100,8 +100,8 @@ function updatePage(data) {
     });
 }
 
-function getMillisSinceUpdate() {
-    return getMillisSinceRefresh(new Date(), getMillisFromMidnight($('#updated').text()));
+function getMillisSinceUpdate(updated) {
+    return getMillisSinceRefresh(new Date(), getMillisFromMidnight(updated));
 }
 
 function setStation(id) {
@@ -117,7 +117,7 @@ function setStation(id) {
             return;
         }
 
-    if (getMillisSinceUpdate() > 200000) {
+    if (getMillisSinceUpdate(data.updated) > 200000) {
         responseStatus.set("expired", $("#bg"));
     } else {
         responseStatus.set(status, $("#bg"));
@@ -159,7 +159,7 @@ function updateClock() {
         return;
     }
 
-    var millisSinceUpdate = getMillisSinceUpdate();
+    var millisSinceUpdate = getMillisSinceUpdate(updated);
     var millisSinceRequest = currentDate.getTime() - millis.getRequest();
     var millisSinceResponse = currentDate.getTime() - millis.getResponse();
     $('#ago').text(millisSinceUpdate + " " + millisSinceRequest + " " + millisSinceResponse + " " + responseStatus.get());
