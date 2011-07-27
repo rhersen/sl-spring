@@ -82,7 +82,7 @@ function updatePage(data) {
 
     var c = getContext();
     state.lineHeight = getCanvas().height / (data.departures.length + 2);
-    c.font = state.lineHeight + "px serif";
+    c.font = state.lineHeight + "px sans-serif";
     var y = state.lineHeight;
 
     $(data.departures).each(function (i, departure) {
@@ -179,6 +179,7 @@ function handleResize() {
     canvas.height = div.scrollHeight - 4;
     var c = getContext();
     c.font = canvas.height / 10 + "px serif";
+    draw();
 }
 
 function draw() {
@@ -199,7 +200,6 @@ function init(id, direction) {
     handleResize();
     window.onresize = handleResize;
 
-    draw();
     updateClock();
     setInterval(updateClock, 256);
 }
