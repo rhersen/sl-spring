@@ -73,6 +73,7 @@ function setDirection(direction) {
 
 var millis;
 var responseStatus = createStatus();
+var updated = "";
 
 function updatePage(data) {
     var nChecked = isNorthChecked();
@@ -83,7 +84,8 @@ function updatePage(data) {
     }
     $("#station").html(data.stationName);
 
-    $("#updated").html(data.updated);
+    updated = data.updated;
+    $("#updated").html(updated);
 
     $('#departures tr').remove();
 
@@ -151,7 +153,6 @@ function updateCountdown(currentDate) {
 function updateClock() {
     var currentDate = new Date();
     updateCountdown(currentDate);
-    var updated = $('#updated').text();
 
     if (!millis) {
         millis = createMillis();

@@ -14,6 +14,14 @@ body.expired {
     background: #b0c4de;
 }
 
+div.fullscreen {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
 a:link, a:visited, a:hover {
     color: white;
     font-size: 48px;

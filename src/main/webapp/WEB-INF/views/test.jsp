@@ -17,11 +17,16 @@
     <h1 id="qunit-header">Test of station.js</h1>
     <h2 id="qunit-banner"></h2>
     <ol>
-        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9525&direction=n">Tullinge</a></li>
-        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9001&direction=s">Centralen</a></li>
-        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9510&direction=s">Karlberg</a></li>
-        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9529&direction=ns">Älvsjö</a></li>
-        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9702&direction=s">Jakobsberg</a></li>
+        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9525&direction=n">Tullinge</a>
+            <a href="${pageContext.request.contextPath}/station/canvas?id=9525&direction=n">Tullinge</a></li>
+        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9001&direction=s">Centralen</a>
+            <a href="${pageContext.request.contextPath}/station/canvas?id=9001&direction=s">Centralen</a></li>
+        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9510&direction=s">Karlberg</a>
+            <a href="${pageContext.request.contextPath}/station/canvas?id=9510&direction=s">Karlberg</a></li>
+        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9529&direction=ns">Älvsjö</a>
+            <a href="${pageContext.request.contextPath}/station/canvas?id=9529&direction=ns">Älvsjö</a></li>
+        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9702&direction=s">Jakobsberg</a>
+            <a href="${pageContext.request.contextPath}/station/canvas?id=9702&direction=s">Jakobsberg</a></li>
     </ol>
     <h2 id="qunit-userAgent"></h2>
     <ol id="qunit-tests"></ol>

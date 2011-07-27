@@ -9,7 +9,6 @@
             content="width=device-width, height=device-height, user-scalable=no"/>
       <title>station</title>
       <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/main.css"/>
-
       <script type="text/javascript" src="${pageContext.request.contextPath}/resources/jquery-1.6.1.min.js" ></script>
       <script type="text/javascript" src="${pageContext.request.contextPath}/resources/timecalc.js" ></script>
       <script type="text/javascript" src="${pageContext.request.contextPath}/resources/station.js" ></script>
@@ -37,7 +36,7 @@
       <span onclick="setStation(9524);">M</span>
       <span onclick="setStation(9523);">R</span>
   </div>
-  
+
   <h3 id="ago">ago</h3>
 
   <div>

@@ -37,6 +37,14 @@ public class StationController {
         return "dynamic";
     }
 
+    @RequestMapping(value = "/canvas", method = RequestMethod.GET)
+    public String getCanvas(@RequestParam String id, @RequestParam String direction, Model model)
+            throws IOException, SAXException {
+        model.addAttribute("id", id);
+        model.addAttribute("direction", direction);
+        return "canvas";
+    }
+
     @RequestMapping(value = "/departures", method = RequestMethod.GET)
     public
     @ResponseBody
