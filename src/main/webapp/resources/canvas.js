@@ -67,6 +67,13 @@ function getCanvas() {
 function getContext() {
     return getCanvas().getContext('2d');
 }
+
+function updateLineHeight() {
+    var c = getContext();
+    state.lineHeight = getCanvas().height / (state.departures.length + 2);
+    c.font = state.lineHeight + "px sans-serif";
+}
+
 function updatePage(data) {
 //    var nChecked = isNorthChecked();
 //    var sChecked = isSouthChecked();
@@ -82,10 +89,7 @@ function updatePage(data) {
     //$("#updated").html(updated);
 
     //$('#departures tr').remove();
-
-    var c = getContext();
-    state.lineHeight = getCanvas().height / (data.departures.length + 2);
-    c.font = state.lineHeight + "px sans-serif";
+    handleResize();
 }
 
 function getMillisSinceUpdate(updated) {
@@ -161,12 +165,20 @@ function updateClock() {
 }
 
 function handleResize() {
+    var margin = 5;
     var canvas = $('canvas')[0];
-    var div = $('div.fullscreen')[0];
-    canvas.width = div.scrollWidth - 4;
-    canvas.height = div.scrollHeight - 4;
-    var c = getContext();
-    c.font = canvas.height / 10 + "px serif";
+    state.innerHeight = window.innerHeight;
+    canvas.style.marginLeft = margin+"px";
+    canvas.style.marginTop = margin+"px";
+    // set canvas dimensions
+
+    canvas.width = window.innerWidth-(margin*2);
+    canvas.height = window.innerHeight-(margin*2);
+
+    if (state.departures) {
+        updateLineHeight();
+    }
+
     draw();
 }
 
