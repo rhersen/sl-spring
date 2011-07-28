@@ -1,6 +1,7 @@
 var state = {};
 
 state.stationId = 9525;
+state.lineHeight = 33;
 
 function createStatus() {
     var that = {};
@@ -75,7 +76,9 @@ function updatePage(data) {
     }
     //$("#station").html(data.stationName);
 
+    state.stationName = data.stationName;
     state.updated = data.updated;
+    state.departures = data.departures;
     //$("#updated").html(updated);
 
     //$('#departures tr').remove();
@@ -83,21 +86,6 @@ function updatePage(data) {
     var c = getContext();
     state.lineHeight = getCanvas().height / (data.departures.length + 2);
     c.font = state.lineHeight + "px sans-serif";
-    var y = state.lineHeight;
-
-    $(data.departures).each(function (i, departure) {
-        c.fillText(departure.time, 8, y += state.lineHeight);
-        c.fillText(departure.destination, state.lineHeight * 4, y);
-//        var row;
-//        if ((nChecked && departure.direction === 'n') ||
-//                (sChecked && departure.direction === 's')) {
-//            row = $('<tr/>').appendTo($('#departures'));
-//            row.addClass(getDelayed(departure.delayed));
-//            $('<td/>').appendTo(row).html(departure.time);
-//            $('<td/>').appendTo(row).html(departure.destination);
-//            $('<td/>').appendTo(row).html('countdown').addClass('countdown');
-//        }
-    });
 }
 
 function getMillisSinceUpdate(updated) {
@@ -193,6 +181,22 @@ function draw() {
     c.fillRect(0, 0, canvas.width - 8, canvas.height - 8);
     c.strokeRect(0, 0, canvas.width - 8, canvas.height - 8);
     c.fillStyle = '#000';
+
+    var y = state.lineHeight;
+
+    $(state.departures).each(function (i, departure) {
+        c.fillText(departure.time, 8, y += state.lineHeight);
+        c.fillText(departure.destination, state.lineHeight * 4, y);
+//        var row;
+//        if ((nChecked && departure.direction === 'n') ||
+//                (sChecked && departure.direction === 's')) {
+//            row = $('<tr/>').appendTo($('#departures'));
+//            row.addClass(getDelayed(departure.delayed));
+//            $('<td/>').appendTo(row).html(departure.time);
+//            $('<td/>').appendTo(row).html(departure.destination);
+//            $('<td/>').appendTo(row).html('countdown').addClass('countdown');
+//        }
+    });
 }
 
 function init(id, direction) {
