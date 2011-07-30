@@ -14,19 +14,22 @@ function createStatus() {
 
     that.set = function (status, bg) {
         s = status;
+    };
 
-        bg.removeClass("pending");
-        bg.removeClass("error");
-        bg.removeClass("expired");
-
-        if (status === "") {
-            bg.addClass("pending");
-        } else if (status === "expired") {
-            bg.addClass("expired");
-        } else if (status === "success") {
-        } else {
-            bg.addClass("error");
+    that.getBg = function () {
+        if (s === "success") {
+            return '#355';
         }
+
+        if (s === "expired") {
+            return '#bce';
+        }
+
+        if (s === "error") {
+            return '#c25';
+        }
+
+        return '#000';
     };
 
     return that;
@@ -81,14 +84,11 @@ function updatePage(data) {
     function getDelayed(delayed) {
         return delayed ? "delayed" : "punctual";
     }
-    //$("#station").html(data.stationName);
 
     state.stationName = data.stationName;
     state.updated = data.updated;
     state.departures = data.departures;
-    //$("#updated").html(updated);
 
-    //$('#departures tr').remove();
     handleResize();
 }
 
@@ -105,14 +105,14 @@ function setStation(id) {
         state.millis.responseReceived();
 
         if (!data) {
-//            state.responseStatus.set("no data", $("#bg"));
+            state.responseStatus.set("no data", $("#bg"));
             return;
         }
 
     if (getMillisSinceUpdate(data.updated) > 200000) {
-//        state.responseStatus.set("expired", $("#bg"));
+        state.responseStatus.set("expired", $("#bg"));
     } else {
-//        state.responseStatus.set(status, $("#bg"));
+        state.responseStatus.set(status, $("#bg"));
     }
 
         updatePage(data);
@@ -121,12 +121,12 @@ function setStation(id) {
     //noinspection JSUnusedLocalSymbols
     function handleError(jqXHR, status) {
         state.millis.responseReceived();
-//        state.responseStatus.set(status, $("#bg"));
+        state.responseStatus.set(status, $("#bg"));
     }
 
     state.stationId = id;
     state.millis.requestSent();
-//    state.responseStatus.set("", $("#bg"));
+    state.responseStatus.set("", $("#bg"));
 
     $.ajax({url: getAjaxUrl(), success: handleSuccess, error: handleError});
 }
@@ -142,7 +142,7 @@ function updateCountdown(currentDate) {
 
 function updateClock() {
     var currentDate = new Date();
-    updateCountdown(currentDate);
+    draw();
 
     if (!state.millis) {
         state.millis = createMillis();
@@ -182,23 +182,24 @@ function handleResize() {
     draw();
 }
 
+function getCurrentTimeMillis(currentDate) {
+    return currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
+}
 function draw() {
     var canvas = getCanvas();
     var c = getContext();
 
-    c.strokeStyle = '#f00'; // red
-    c.lineWidth = 4;
-
+    c.fillStyle = state.responseStatus.getBg();
+    c.fillRect(0, 0, canvas.width, canvas.height);
     c.fillStyle = '#fff';
-    c.fillRect(0, 0, canvas.width - 8, canvas.height - 8);
-    c.strokeRect(0, 0, canvas.width - 8, canvas.height - 8);
-    c.fillStyle = '#000';
 
     var y = state.lineHeight;
 
     $(state.departures).each(function (i, departure) {
         c.fillText(departure.time, 8, y += state.lineHeight);
-        c.fillText(departure.destination, state.lineHeight * 4, y);
+        c.fillText(departure.destination, canvas.width / 5, y);
+        c.fillText(getCountdown(departure.time, getCurrentTimeMillis(new Date())), canvas.width * 4 / 5, y);
+
 //        var row;
 //        if ((nChecked && departure.direction === 'n') ||
 //                (sChecked && departure.direction === 's')) {
