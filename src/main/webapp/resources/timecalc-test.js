@@ -95,6 +95,22 @@ function tests() {
         ok(!isOutdated(6000, 6000, 6000), "less than ten seconds");
     });
 
+    test("millis", function() {
+        var target = createMillis();
+        var start, middle, end;
+        start = new Date().getTime();
+        target.requestSent();
+        while (new Date().getTime() === start) {}
+        middle = new Date().getTime();
+        target.responseReceived();
+        while (new Date().getTime() === middle) {}
+        end = new Date().getTime();
+
+        ok(target.getRequest() > 0, "request sent after start");
+        ok(target.getRequest() >= target.getResponse(), "response should be received after request");
+        ok(target.getResponse() <= end, "response should be received before end");
+    });
+
 }
 
 $(document).ready(tests);

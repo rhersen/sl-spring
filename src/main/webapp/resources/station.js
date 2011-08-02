@@ -29,31 +29,6 @@ function createStatus() {
     return that;
 }
 
-function createMillis() {
-    var that = {};
-
-    var requestMillis = new Date().getTime();
-    var responseMillis = requestMillis;
-
-    that.getRequest = function () {
-        return requestMillis;
-    };
-
-    that.getResponse = function () {
-        return responseMillis;
-    };
-
-    that.requestSent = function () {
-        requestMillis = new Date().getTime();
-    };
-
-    that.responseReceived = function () {
-        responseMillis = new Date().getTime();
-    };
-
-    return that;
-}
-
 function isNorthChecked() {
     return $("#northbound").prop("checked") || !$("#southbound").prop("checked");
 }
@@ -150,6 +125,9 @@ function updateCountdown(currentDate) {
     });
 }
 
+function shouldUpdate() {
+    return isOutdated(getMillisSinceUpdate(updated), millis.getRequest(), millis.getResponse());
+}
 function updateClock() {
     var currentDate = new Date();
     updateCountdown(currentDate);
@@ -160,12 +138,9 @@ function updateClock() {
         return;
     }
 
-    var millisSinceUpdate = getMillisSinceUpdate(updated);
-    var millisSinceRequest = currentDate.getTime() - millis.getRequest();
-    var millisSinceResponse = currentDate.getTime() - millis.getResponse();
-    $('#ago').text(millisSinceUpdate + " " + millisSinceRequest + " " + millisSinceResponse + " " + responseStatus.get());
+    $('#ago').text(getMillisSinceUpdate(updated) + " " + millis.getRequest() + " " + millis.getResponse() + " " + responseStatus.get());
 
-    if (isOutdated(millisSinceUpdate, millisSinceRequest, millisSinceResponse)) {
+    if (shouldUpdate()) {
         setStation(stationId);
     }
 }

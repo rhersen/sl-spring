@@ -65,22 +65,6 @@ function tests() {
         ok(isSouthChecked(), "south should have been set");
     });
 
-    test("millis", function() {
-        var target = createMillis();
-        var start, middle, end;
-        start = new Date().getTime();
-        target.requestSent();
-        while (new Date().getTime() === start) {}
-        middle = new Date().getTime();
-        target.responseReceived();
-        while (new Date().getTime() === middle) {}
-        end = new Date().getTime();
-
-        ok(start <= target.getRequest(), "request sent after start");
-        ok(target.getRequest() <= target.getResponse(), "response should be received after request");
-        ok(target.getResponse() <= end, "response should be received before end");
-    });
-
     test("updateCountdown", function() {
         var rows = $('#departures tr');
         equals(rows.size(), 2, "fixture should contain two rows");

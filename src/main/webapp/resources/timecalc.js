@@ -67,3 +67,28 @@ function next() {
 function isOutdated(millisSinceRefresh, millisSinceRequest, millisSinceResponse) {
     return millisSinceRefresh > 60000 && millisSinceRequest > 30000 && millisSinceResponse > 10000;
 }
+
+function createMillis() {
+    var that = {};
+
+    var requestMillis = 0;
+    var responseMillis = 0;
+
+    that.getRequest = function () {
+        return new Date().getTime() - requestMillis;
+    };
+
+    that.getResponse = function () {
+        return new Date().getTime() - responseMillis;
+    };
+
+    that.requestSent = function () {
+        requestMillis = new Date().getTime();
+    };
+
+    that.responseReceived = function () {
+        responseMillis = new Date().getTime();
+    };
+
+    return that;
+}
