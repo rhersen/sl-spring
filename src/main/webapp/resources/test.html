@@ -6,10 +6,12 @@
     <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
     <script type="text/javascript" src="qunit.js"></script>
 
-    <script type="text/javascript" src="station.js"></script>
-    <script type="text/javascript" src="timecalc.js"></script>
-    <script type="text/javascript" src="station-test.js"></script>
-    <script type="text/javascript" src="timecalc-test.js"></script>
+      <script type="text/javascript" src="timecalc.js"></script>
+      <script type="text/javascript" src="station.js"></script>
+      <script type="text/javascript" src="canvas.js"></script>
+      <script type="text/javascript" src="timecalc-test.js"></script>
+      <script type="text/javascript" src="canvas-test.js"></script>
+      <script type="text/javascript" src="station-test.js"></script>
   </head>
   <body>
     <h1 id="qunit-header">Test of station.js</h1>
@@ -32,8 +34,12 @@
                 <td class="countdown">countdown2</td>
             </tr>
         </table>
-      <div id="bg">
-      </div>
+        <div id="bg">
+        </div>
+        <div class="fullscreen">
+            <canvas>
+            </canvas>
+        </div>
     </div>
   </body>
 </html>

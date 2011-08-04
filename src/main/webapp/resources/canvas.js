@@ -33,22 +33,43 @@ var state = {
         };
 
         return that;
-    }()};
+    }()
+};
+
+function getCanvas() {
+    return $('canvas')[0];
+}
+
+function getContext() {
+    return getCanvas().getContext('2d');
+}
+
+function getMillisSinceUpdate() {
+    return getMillisSinceRefresh(new Date(), getMillisFromMidnight(state.updated));
+}
+
+function draw(c) {
+    function getCurrentTimeMillis(currentDate) {
+        return currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
+    }
+
+    var y = state.lineHeight;
+
+    c.fillStyle = state.responseStatus.getBg();
+    c.fillRect(0, 0, getCanvas().width, getCanvas().height);
+
+    c.fillStyle = '#fff';
+    c.fillText(getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get(), 4, state.lineHeight);
+
+    $(state.departures).each(function (i, departure) {
+        c.fillText(departure.time, 8, y += state.lineHeight);
+        c.fillText(departure.destination, getCanvas().width / 5, y);
+        c.fillText(getCountdown(departure.time, getCurrentTimeMillis(new Date())), getCanvas().width * 4 / 5, y);
+    });
+}
 
 //noinspection JSUnusedLocalSymbols
 function init(id, direction) {
-    function getCanvas() {
-        return $('canvas')[0];
-    }
-
-    function getContext() {
-        return getCanvas().getContext('2d');
-    }
-
-    function getMillisSinceUpdate() {
-        return getMillisSinceRefresh(new Date(), getMillisFromMidnight(state.updated));
-    }
-
     function handleResize() {
         function updateLineHeight() {
             var c = getContext();
@@ -72,31 +93,6 @@ function init(id, direction) {
     function run() {
         function shouldUpdate() {
             return isOutdated(getMillisSinceUpdate(), state.millis.getRequest(), state.millis.getResponse());
-        }
-
-        function draw() {
-            function getCurrentTimeMillis(currentDate) {
-                return currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
-            }
-
-            var c = getContext();
-
-            c.fillStyle = state.responseStatus.getBg();
-            c.fillRect(0, 0, getCanvas().width, getCanvas().height);
-
-            c.fillStyle = '#fff';
-            c.fillRect(0, 0, getCanvas().width, state.lineHeight);
-            c.fillStyle = '#000';
-            c.fillText(getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get(), 4, state.lineHeight);
-
-            var y = state.lineHeight;
-            c.fillStyle = '#fff';
-
-            $(state.departures).each(function (i, departure) {
-                c.fillText(departure.time, 8, y += state.lineHeight);
-                c.fillText(departure.destination, getCanvas().width / 5, y);
-                c.fillText(getCountdown(departure.time, getCurrentTimeMillis(new Date())), getCanvas().width * 4 / 5, y);
-            });
         }
 
         function setStation(id) {
@@ -138,7 +134,7 @@ function init(id, direction) {
             $.ajax({url: getAjaxUrl(), success: handleSuccess, error: handleError});
         }
 
-        draw();
+        draw(getContext());
 
         if (shouldUpdate()) {
             setStation(state.stationId);
