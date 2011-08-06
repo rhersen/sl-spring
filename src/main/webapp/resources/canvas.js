@@ -1,6 +1,5 @@
 var state = {
     stationId: 9525,
-    lineHeight: 33,
     updated: '',
     millis: createMillis(),
     responseStatus: function () {
@@ -48,35 +47,43 @@ function getMillisSinceUpdate() {
     return getMillisSinceRefresh(new Date(), getMillisFromMidnight(state.updated));
 }
 
-function draw(c) {
+function draw(canvas) {
     function getCurrentTimeMillis(currentDate) {
         return currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
     }
 
-    var y = state.lineHeight;
+    var c = canvas.getContext('2d');
+    var lineHeight = getLineHeight(canvas);
+
+    c.font = lineHeight + "px sans-serif";
 
     c.fillStyle = state.responseStatus.getBg();
-    c.fillRect(0, 0, getCanvas().width, getCanvas().height);
+    c.fillRect(0, 0, canvas.width, getCanvas().height);
 
     c.fillStyle = '#fff';
-    c.fillText(getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get(), 4, state.lineHeight);
+    c.fillText(getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get(), 4, lineHeight);
 
     $(state.departures).each(function (i, departure) {
-        c.fillText(departure.time, 8, y += state.lineHeight);
-        c.fillText(departure.destination, getCanvas().width / 5, y);
-        c.fillText(getCountdown(departure.time, getCurrentTimeMillis(new Date())), getCanvas().width * 4 / 5, y);
+        function getY(i) {
+            return lineHeight * (i + 2);
+        }
+
+        c.fillText(departure.time, 8, getY(i));
+        c.fillText(departure.destination, getCanvas().width / 5, lineHeight * (i + 2));
+        c.fillText(getCountdown(departure.time, getCurrentTimeMillis(new Date())), getCanvas().width * 4 / 5, lineHeight * (i + 2));
     });
 }
 
-//noinspection JSUnusedLocalSymbols
+function getLineHeight(canvas) {
+    if (state.departures) {
+        return canvas.height / (state.departures.length + 2);
+    } else {
+        return 33;
+    }
+}
+
 function init(id, direction) {
     function handleResize() {
-        function updateLineHeight() {
-            var c = getContext();
-            state.lineHeight = getCanvas().height / (state.departures.length + 2);
-            c.font = state.lineHeight + "px sans-serif";
-        }
-
         var margin = 5;
         state.innerHeight = window.innerHeight;
         getCanvas().style.marginLeft = margin + "px";
@@ -84,10 +91,6 @@ function init(id, direction) {
 
         getCanvas().width = window.innerWidth - (margin * 2);
         getCanvas().height = window.innerHeight - (margin * 2);
-
-        if (state.departures) {
-            updateLineHeight();
-        }
     }
 
     function run() {
@@ -134,7 +137,7 @@ function init(id, direction) {
             $.ajax({url: getAjaxUrl(), success: handleSuccess, error: handleError});
         }
 
-        draw(getContext());
+        draw(getCanvas());
 
         if (shouldUpdate()) {
             setStation(state.stationId);
