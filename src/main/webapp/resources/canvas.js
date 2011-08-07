@@ -2,6 +2,7 @@ var state = {
     stationId: 9525,
     updated: '',
     millis: createMillis(),
+    currentDate: new Date(),
     responseStatus: function () {
         var that = {};
 
@@ -44,7 +45,7 @@ function getContext() {
 }
 
 function getMillisSinceUpdate() {
-    return getMillisSinceRefresh(new Date(), getMillisFromMidnight(state.updated));
+    return getMillisSinceRefresh(state.currentDate, getMillisFromMidnight(state.updated));
 }
 
 function draw(canvas) {
@@ -58,7 +59,7 @@ function draw(canvas) {
     c.font = lineHeight + "px sans-serif";
 
     c.fillStyle = state.responseStatus.getBg();
-    c.fillRect(0, 0, canvas.width, getCanvas().height);
+    c.fillRect(0, 0, canvas.width, canvas.height);
 
     c.fillStyle = '#fff';
     c.fillText(getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get(), 4, lineHeight);
@@ -68,9 +69,16 @@ function draw(canvas) {
             return lineHeight * (i + 2);
         }
 
+        function fillTextRight(countdown) {
+            var rightEdge = canvas.width;
+            var measured = c.measureText(countdown);
+            c.fillText(countdown, rightEdge - measured.width, getY(i));
+        }
+
         c.fillText(departure.time, 8, getY(i));
-        c.fillText(departure.destination, getCanvas().width / 5, lineHeight * (i + 2));
-        c.fillText(getCountdown(departure.time, getCurrentTimeMillis(new Date())), getCanvas().width * 4 / 5, lineHeight * (i + 2));
+        c.fillText(departure.destination, canvas.width / 5, getY(i));
+        var countdown = getCountdown(departure.time, getCurrentTimeMillis(state.currentDate));
+        fillTextRight(countdown, i, canvas, c);
     });
 }
 
@@ -137,6 +145,8 @@ function init(id, direction) {
             $.ajax({url: getAjaxUrl(), success: handleSuccess, error: handleError});
         }
 
+        state.currentDate = new Date();
+        
         draw(getCanvas());
 
         if (shouldUpdate()) {

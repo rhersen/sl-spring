@@ -2,6 +2,7 @@ function tests() {
     function createCanvasMock(context) {
         return {
             height: 480,
+            width: 800,
             getContext: function () {
                 return context;
             }
@@ -14,6 +15,9 @@ function tests() {
             fillRect: function () {},
             fillText: function () {
                 ++this.calls;
+            },
+            measureText: function () {
+                return {width: 200};
             }
         };
 
@@ -31,6 +35,9 @@ function tests() {
                 if (text === time) {
                     ++this.calls;
                 }
+            },
+            measureText: function () {
+                return {width: 200};
             }
         };
         state.departures = [{time: time}];
@@ -47,6 +54,9 @@ function tests() {
                 if (text === destination) {
                     ++this.calls;
                 }
+            },
+            measureText: function () {
+                return {width: 200};
             }
         };
         state.departures = [{time: "22:48", destination: destination}];
@@ -66,6 +76,9 @@ function tests() {
                 if (text === "Line 2") {
                     this.y2 = y;
                 }
+            },
+            measureText: function () {
+                return {width: 200};
             }
         };
         state.departures = [
@@ -75,6 +88,46 @@ function tests() {
         draw(createCanvasMock(contextMock));
         equals(contextMock.y1, 240);
         equals(contextMock.y2, 360);
+    });
+
+    test("draw countdown", function() {
+        var contextMock = {
+            text: "nyi",
+            fillRect: function () {},
+            fillText: function (text) {
+                this.text = text;
+            },
+            measureText: function () {
+                return {width: 200};
+            }
+        };
+        state.departures = [
+            {time: "22:48", destination: "Line 1"}
+        ];
+        state.currentDate = new Date(2010, 5, 27, 22, 40, 0, 0);
+        draw(createCanvasMock(contextMock));
+        equals(contextMock.text, "8:00.0", "should be 8 minutes to departure");
+    });
+
+    test("align countdown", function() {
+        var contextMock = {
+            x: 0,
+            fillRect: function () {},
+            fillText: function (text, x) {
+                if (text === "8:00.0") {
+                    this.x = x;
+                }
+            },
+            measureText: function () {
+                return {width: 200};
+            }
+        };
+        state.departures = [
+            {time: "22:48", destination: "Line 1"}
+        ];
+        state.currentDate = new Date(2010, 5, 27, 22, 40, 0, 0);
+        draw(createCanvasMock(contextMock));
+        ok(contextMock.x <= 600, "should not draw outside right edge: " + contextMock.x);
     });
 
 }
