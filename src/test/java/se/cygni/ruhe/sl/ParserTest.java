@@ -57,10 +57,11 @@ public class ParserTest {
         Collection<Departure> departures = result.getDepartures();
         assertEquals(4, departures.size());
         Iterator<Departure> iterator = departures.iterator();
-        Departure departure = findNorthbound(iterator);
-        assertEquals("22:32", departure.getTime());
-        assertEquals("Märsta", departure.getDestination());
-        assertEquals("23:02", iterator.next().getTime());
+        Departure departure = findSouthbound(iterator);
+        assertEquals("22:30", departure.getTime());
+        assertEquals("Södertälje hamn", departure.getFullDestination());
+        assertTrue("should be delayed", departure.isDelayed());
+        assertFalse("should not be delayed", iterator.next().isDelayed());
     }
 
     @Test
@@ -83,9 +84,17 @@ public class ParserTest {
         return target.parse(new InputStreamReader(stream, "UTF-8"));
     }
 
+    private Departure findSouthbound(Iterator<Departure> iterator) {
+        return skipDirection(iterator, "n");
+    }
+
     private Departure findNorthbound(Iterator<Departure> iterator) {
+        return skipDirection(iterator, "s");
+    }
+
+    private Departure skipDirection(Iterator<Departure> iterator, String skip) {
         Departure departure = iterator.next();
-        while (departure.getDirection().equals("s")) {
+        while (departure.getDirection().equals(skip)) {
             departure = iterator.next();
         }
         return departure;

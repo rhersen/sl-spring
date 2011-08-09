@@ -10,8 +10,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
 @Controller
 @RequestMapping(value = "/station")
@@ -49,8 +54,20 @@ public class StationController {
     public
     @ResponseBody
     Departures getJson(@RequestParam String id) throws IOException, SAXException {
-        URL url = new URL("http://mobilrt.sl.se/?tt=TRAIN&SiteId=" + id);
-        return parser.parse(new InputStreamReader(url.openStream(), "UTF-8"));
+        try {
+            URL url = new URL("http://mobilrt.sl.se/?tt=TRAIN&SiteId=" + id);
+            return parser.parse(new InputStreamReader(url.openStream(), "UTF-8"));
+        } catch (IOException e) {
+            return createFakeDepartures();
+        }
+    }
+
+    private Departures createFakeDepartures() {
+        Collection<Departure> ds = new ArrayList<Departure>();
+        String updated = new SimpleDateFormat("hh:mm").format(new Date());
+        ds.add(new Departure(updated, "Arvidsjaur", false, "n"));
+        ds.add(new Departure(updated, "Burseryd", false, "s"));
+        return new Departures(updated, "IOException", ds);
     }
 
     @SuppressWarnings({"UnusedParameters"})

@@ -53,6 +53,10 @@ function draw(canvas) {
         return currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
     }
 
+    function getStatusString() {
+        return getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get();
+    }
+
     var c = canvas.getContext('2d');
     var lineHeight = getLineHeight(canvas);
 
@@ -62,11 +66,12 @@ function draw(canvas) {
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     c.fillStyle = '#fff';
-    c.fillText(getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get(), 4, lineHeight);
+    c.fillText(state.stationName, 4, lineHeight);
+    c.fillText(getStatusString(), 4, lineHeight * 2);
 
     $(state.departures).each(function (i, departure) {
         function getY(i) {
-            return lineHeight * (i + 2);
+            return lineHeight * (i + 3);
         }
 
         function fillTextRight(countdown) {
@@ -75,8 +80,7 @@ function draw(canvas) {
             c.fillText(countdown, rightEdge - measured.width, getY(i));
         }
 
-        c.fillText(departure.time, 8, getY(i));
-        c.fillText(departure.destination, canvas.width / 5, getY(i));
+        c.fillText(departure.time + ' ' + departure.fullDestination, 8, getY(i));
         var countdown = getCountdown(departure.time, getCurrentTimeMillis(state.currentDate));
         fillTextRight(countdown, i, canvas, c);
     });
