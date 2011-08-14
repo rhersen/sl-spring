@@ -9,60 +9,60 @@ function tests() {
         };
     }
 
+    var nop = function () {};
+
+    var width200 = function () {
+        return {width: 200};
+    };
+
     test("draw no departures", function() {
+        var calls = 0;
         var contextMock = {
-            calls: 0,
-            fillRect: function () {},
+            fillRect: nop,
             fillText: function () {
-                ++this.calls;
+                ++calls;
             },
-            measureText: function () {
-                return {width: 200};
-            }
+            measureText: width200
         };
 
-        equals(contextMock.calls, 0, "fillText should not have been called yet");
+        equals(calls, 0, "fillText should not have been called yet");
         draw(createCanvasMock(contextMock));
-        equals(contextMock.calls, 2, "fillText should be called twice");
+        equals(calls, 2, "fillText should be called twice");
     });
 
     test("draw time and destination", function() {
         var time = "22:48";
         var destination = "Tumba";
+        var calls = 0;
         var contextMock = {
-            calls: 0,
-            fillRect: function () {},
+            fillRect: nop,
             fillText: function (text) {
                 if (text.match(new RegExp(time + '.*' + destination))) {
-                    ++this.calls;
+                    ++calls;
                 }
             },
-            measureText: function () {
-                return {width: 200};
-            }
+            measureText: width200
         };
         state.stationName = 'Tumba';
         state.departures = [{time: time, fullDestination: destination}];
         draw(createCanvasMock(contextMock));
-        equals(contextMock.calls, 1, "fillText should be called once with value " + time);
+        equals(calls, 1, "fillText should be called once with value " + time);
     });
 
     test("draw lines", function() {
+        var y1 = 0;
+        var y2 = 0;
         var contextMock = {
-            y1: 0,
-            y2: 0,
-            fillRect: function () {},
+            fillRect: nop,
             fillText: function (text, x, y) {
                 if (text.match(/Line 1/)) {
-                    this.y1 = y;
+                    y1 = y;
                 }
                 if (text.match(/Line 2/)) {
-                    this.y2 = y;
+                    y2 = y;
                 }
             },
-            measureText: function () {
-                return {width: 200};
-            }
+            measureText: width200
         };
         state.stationName = 'Tumba';
         state.departures = [
@@ -70,24 +70,22 @@ function tests() {
             {time: "22:49", fullDestination: "Line 2"}
         ];
         draw(createCanvasMock(contextMock));
-        equals(contextMock.y1, 360);
-        equals(contextMock.y2, 480);
+        equals(y1, 360);
+        equals(y2, 480);
     });
 
     test("draw station", function() {
+        var xTumba = 10;
+        var yTumba = 0;
         var contextMock = {
-            x: 10,
-            y: 0,
-            fillRect: function () {},
+            fillRect: nop,
             fillText: function (text, x, y) {
                 if (text.match(/Tumba/)) {
-                    this.x = x;
-                    this.y = y;
+                    xTumba = x;
+                    yTumba = y;
                 }
             },
-            measureText: function () {
-                return {width: 200};
-            }
+            measureText: width200
         };
         state.stationName = 'Tumba';
         state.departures = [
@@ -95,48 +93,44 @@ function tests() {
             {time: "22:49", fullDestination: "Line 2"}
         ];
         draw(createCanvasMock(contextMock));
-        ok(contextMock.x < 10, 'should be left aligned');
-        equals(contextMock.y, 120);
+        ok(xTumba < 10, 'should be left aligned');
+        equals(yTumba, 120);
     });
 
     test("draw countdown", function() {
+        var countdown;
         var contextMock = {
-            text: "nyi",
-            fillRect: function () {},
+            fillRect: nop,
             fillText: function (text) {
-                this.text = text;
+                countdown = text;
             },
-            measureText: function () {
-                return {width: 200};
-            }
+            measureText: width200
         };
         state.departures = [
             {time: "22:48", fullDestination: "Line 1"}
         ];
         state.currentDate = new Date(2010, 5, 27, 22, 40, 0, 0);
         draw(createCanvasMock(contextMock));
-        equals(contextMock.text, "8:00.0", "should be 8 minutes to departure");
+        equals(countdown, "8:00.0", "should be 8 minutes to departure");
     });
 
     test("align countdown", function() {
+        var countdownX;
         var contextMock = {
-            x: 0,
-            fillRect: function () {},
+            fillRect: nop,
             fillText: function (text, x) {
                 if (text === "8:00.0") {
-                    this.x = x;
+                    countdownX = x;
                 }
             },
-            measureText: function () {
-                return {width: 200};
-            }
+            measureText: width200
         };
         state.departures = [
             {time: "22:48", fullDestination: "Line 1"}
         ];
         state.currentDate = new Date(2010, 5, 27, 22, 40, 0, 0);
         draw(createCanvasMock(contextMock));
-        ok(contextMock.x <= 600, "should not draw outside right edge: " + contextMock.x);
+        ok(countdownX <= 600, "should not draw outside right edge: " + countdownX);
     });
 
 }
