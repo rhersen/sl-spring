@@ -64,7 +64,7 @@ public class StationController {
 
     private Departures createFakeDepartures() {
         Collection<Departure> ds = new ArrayList<Departure>();
-        String updated = new SimpleDateFormat("hh:mm").format(new Date());
+        String updated = new SimpleDateFormat("HH:mm").format(new Date());
         ds.add(new Departure(updated, "Arvidsjaur", false, "n"));
         ds.add(new Departure(updated, "Burseryd", false, "s"));
         return new Departures(updated, "IOException", ds);
