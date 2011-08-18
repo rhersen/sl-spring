@@ -58,7 +58,21 @@ function draw(canvas) {
     }
 
     var c = canvas.getContext('2d');
-    var lineHeight = getLineHeight(canvas);
+    var lineHeight = getLineHeightToFitHeight(canvas);
+    c.font = "100px sans-serif";
+
+    var sizes = $.makeArray($(state.departures)).map(function (departure) {
+        var textLeft = departure.time + ' ' + departure.fullDestination;
+        var countdown = getCountdown(departure.time, getCurrentTimeMillis(state.currentDate));
+        var width = c.measureText(textLeft).width + c.measureText(countdown).width;
+        return 99 * canvas.width / width;
+    });
+
+    $(sizes).each(function (i, fontSize) {
+        if (fontSize < lineHeight) {
+            lineHeight = fontSize;
+        }
+    });
 
     c.font = lineHeight + "px sans-serif";
 
@@ -80,17 +94,18 @@ function draw(canvas) {
             c.fillText(countdown, rightEdge - measured.width, getY(i));
         }
 
-        c.fillText(departure.time + ' ' + departure.fullDestination, 8, getY(i));
+        var textLeft = departure.time + ' ' + departure.fullDestination;
         var countdown = getCountdown(departure.time, getCurrentTimeMillis(state.currentDate));
-        fillTextRight(countdown, i, canvas, c);
+        c.fillText(textLeft, 8, getY(i));
+        fillTextRight(countdown);
     });
 }
 
-function getLineHeight(canvas) {
+function getLineHeightToFitHeight(canvas) {
     if (state.departures) {
         return canvas.height / (state.departures.length + 2);
     } else {
-        return 33;
+        return 100;
     }
 }
 

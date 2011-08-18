@@ -1,3 +1,7 @@
+function getFontSize(font) {
+    var matches = font.match(/([\.\d]+)px/);
+    return matches[1];
+}
 function tests() {
     function createCanvasMock(context) {
         return {
@@ -11,9 +15,11 @@ function tests() {
 
     var nop = function () {};
 
-    var width200 = function () {
-        return {width: 200};
-    };
+    function width(value) {
+        return function () {
+            return {width: value};
+        }
+    }
 
     test("draw no departures", function() {
         var calls = 0;
@@ -22,7 +28,7 @@ function tests() {
             fillText: function () {
                 ++calls;
             },
-            measureText: width200
+            measureText: width(200)
         };
 
         equals(calls, 0, "fillText should not have been called yet");
@@ -41,7 +47,7 @@ function tests() {
                     ++calls;
                 }
             },
-            measureText: width200
+            measureText: width(200)
         };
         state.stationName = 'Tumba';
         state.departures = [{time: time, fullDestination: destination}];
@@ -62,7 +68,7 @@ function tests() {
                     y2 = y;
                 }
             },
-            measureText: width200
+            measureText: width(200)
         };
         state.stationName = 'Tumba';
         state.departures = [
@@ -85,7 +91,7 @@ function tests() {
                     yTumba = y;
                 }
             },
-            measureText: width200
+            measureText: width(200)
         };
         state.stationName = 'Tumba';
         state.departures = [
@@ -104,7 +110,7 @@ function tests() {
             fillText: function (text) {
                 countdown = text;
             },
-            measureText: width200
+            measureText: width(200)
         };
         state.departures = [
             {time: "22:48", fullDestination: "Line 1"}
@@ -123,7 +129,7 @@ function tests() {
                     countdownX = x;
                 }
             },
-            measureText: width200
+            measureText: width(200)
         };
         state.departures = [
             {time: "22:48", fullDestination: "Line 1"}
@@ -131,6 +137,49 @@ function tests() {
         state.currentDate = new Date(2010, 5, 27, 22, 40, 0, 0);
         draw(createCanvasMock(contextMock));
         ok(countdownX <= 600, "should not draw outside right edge: " + countdownX);
+    });
+
+    test("scale to fit height", function() {
+        var contextMock = {
+            fillRect: nop,
+            fillText: function (text, x) {
+            },
+            measureText: width(200)
+        };
+        state.departures = [
+            {time: "22:48", fullDestination: "Line 1"}
+        ];
+        draw(createCanvasMock(contextMock));
+        var font = contextMock.font;
+        var r = getFontSize(font);
+        var msg = "should be scaled according to height if it fits horizontally: " + r;
+        ok(r > 150, msg);
+        ok(r <= 160, msg);
+    });
+
+    test("scale to fit width", function() {
+        var contextMock = {
+            fillRect: nop,
+            fillText: function (text, x) {
+            },
+            measureText: function (text) {
+                var current = getFontSize(this.font);
+                if (text.match(/wide/)) {
+                    return {width: current * 950 / 100};
+                } else {
+                    return {width: current * 50 / 100};
+                }
+            }
+        };
+        state.departures = [
+            {time: "22:48", fullDestination: "wide"},
+            {time: "22:48", fullDestination: "narrow"}
+        ];
+        draw(createCanvasMock(contextMock));
+        var r = getFontSize(contextMock.font);
+        var msg = "should be scaled according to width of longest line if it doesn't fit horizontally: " + r;
+        ok(r > 70, msg);
+        ok(r < 80, msg);
     });
 
 }
