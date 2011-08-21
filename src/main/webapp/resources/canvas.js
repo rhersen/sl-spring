@@ -1,3 +1,6 @@
+var x = 11;
+var y = 11;
+
 var state = {
     stationId: 9525,
     updated: '',
@@ -48,32 +51,48 @@ function getMillisSinceUpdate() {
     return getMillisSinceRefresh(state.currentDate, getMillisFromMidnight(state.updated));
 }
 
-function draw(canvas) {
-    function getCurrentTimeMillis(currentDate) {
-        return currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
+function getCurrentTimeMillis(currentDate) {
+    return currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
+}
+
+function getLineHeight(canvas) {
+    function reduce(a, identity, f) {
+        if (a.length === 0) {
+            return identity;
+        } else {
+            return f(a[0], reduce(a.slice(1), identity, f));
+        }
     }
 
+    var lineHeight = getLineHeightToFitHeight(canvas);
+    var c = canvas.getContext('2d');
+
+    c.font = "100px sans-serif";
+
+    var a = $($.makeArray($(state.departures)).map(function (departure) {
+        var textLeft = departure.time + ' ' + departure.fullDestination;
+        var countdown = getCountdown(departure.time, getCurrentTimeMillis(state.currentDate));
+        var width = c.measureText(textLeft).width + c.measureText(countdown).width;
+        return 99 * canvas.width / width;
+    }));
+
+    return reduce(a, lineHeight,
+        function (x, y) {
+        if (x < y) {
+            return x;
+        } else {
+            return y;
+        }
+    });
+}
+
+function draw(canvas) {
     function getStatusString() {
         return getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get();
     }
 
     var c = canvas.getContext('2d');
-    var lineHeight = getLineHeightToFitHeight(canvas);
-    c.font = "100px sans-serif";
-
-    var sizes = $.makeArray($(state.departures)).map(function (departure) {
-        var textLeft = departure.time + ' ' + departure.fullDestination;
-        var countdown = getCountdown(departure.time, getCurrentTimeMillis(state.currentDate));
-        var width = c.measureText(textLeft).width + c.measureText(countdown).width;
-        return 99 * canvas.width / width;
-    });
-
-    $(sizes).each(function (i, fontSize) {
-        if (fontSize < lineHeight) {
-            lineHeight = fontSize;
-        }
-    });
-
+    var lineHeight = getLineHeight(canvas, c);
     c.font = lineHeight + "px sans-serif";
 
     c.fillStyle = state.responseStatus.getBg();
