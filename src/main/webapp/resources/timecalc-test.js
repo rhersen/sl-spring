@@ -7,6 +7,8 @@ function tests() {
         return mock;
     }
 
+    module("timecalc");
+
     test("from midnight", function() {
             equals(getCountdown("00:01", 0), "1:00.0");
             equals(getCountdown("0:02", 0), "2:00.0");

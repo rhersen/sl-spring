@@ -1,5 +1,7 @@
 function tests() {
 
+    module("station");
+
     test("set status", function() {
         var bg = $("#bg");
         equals(bg.length, 1);

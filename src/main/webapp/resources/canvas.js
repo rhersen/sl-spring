@@ -1,5 +1,15 @@
-var x = 11;
-var y = 11;
+var touchHandler = {
+    n: 11,
+    x: 11,
+    y: 11,
+    handleTouch: function (event) {
+        this.n = event.touches.length;
+        this.x = event.touches[0].clientX;
+        this.y = event.touches[0].clientY;
+//        setStation(state.stationId + 1);
+        event.preventDefault();
+    }
+};
 
 var state = {
     stationId: 9525,
@@ -78,17 +88,18 @@ function getLineHeight(canvas) {
 
     return reduce(a, lineHeight,
         function (x, y) {
-        if (x < y) {
-            return x;
-        } else {
-            return y;
-        }
-    });
+            if (x < y) {
+                return x;
+            } else {
+                return y;
+            }
+        });
 }
 
 function draw(canvas) {
     function getStatusString() {
-        return getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get();
+//        return getMillisSinceUpdate() + " " + state.millis.getRequest() + " " + state.millis.getResponse() + " " + state.responseStatus.get();
+        return touchHandler.n + "|" + touchHandler.x + "|" + touchHandler.y;
     }
 
     var c = canvas.getContext('2d');
@@ -129,6 +140,45 @@ function getLineHeightToFitHeight(canvas) {
 }
 
 function init(id, direction) {
+    function setStation(id) {
+        function getAjaxUrl() {
+            return "departures?id=" + state.stationId + "&direction=" + 'ns';
+        }
+
+        function handleSuccess(data, status) {
+            state.millis.responseReceived();
+
+            if (!data) {
+                state.responseStatus.set("no data");
+                return;
+            }
+
+            state.stationName = data.stationName;
+            state.updated = data.updated;
+            state.departures = data.departures;
+
+            if (getMillisSinceUpdate() > 200000) {
+                state.responseStatus.set("expired");
+            } else {
+                state.responseStatus.set(status);
+            }
+
+            handleResize();
+        }
+
+        //noinspection JSUnusedLocalSymbols
+        function handleError(jqXHR, status) {
+            state.millis.responseReceived();
+            state.responseStatus.set(status);
+        }
+
+        state.stationId = id;
+        state.millis.requestSent();
+        state.responseStatus.set("");
+
+        $.ajax({url: getAjaxUrl(), success: handleSuccess, error: handleError});
+    }
+
     function handleResize() {
         var margin = 5;
         state.innerHeight = window.innerHeight;
@@ -144,47 +194,8 @@ function init(id, direction) {
             return isOutdated(getMillisSinceUpdate(), state.millis.getRequest(), state.millis.getResponse());
         }
 
-        function setStation(id) {
-            function getAjaxUrl() {
-                return "departures?id=" + state.stationId + "&direction=" + 'ns';
-            }
-
-            function handleSuccess(data, status) {
-                state.millis.responseReceived();
-
-                if (!data) {
-                    state.responseStatus.set("no data");
-                    return;
-                }
-
-                state.stationName = data.stationName;
-                state.updated = data.updated;
-                state.departures = data.departures;
-
-                if (getMillisSinceUpdate() > 200000) {
-                    state.responseStatus.set("expired");
-                } else {
-                    state.responseStatus.set(status);
-                }
-
-                handleResize();
-            }
-
-            //noinspection JSUnusedLocalSymbols
-            function handleError(jqXHR, status) {
-                state.millis.responseReceived();
-                state.responseStatus.set(status);
-            }
-
-            state.stationId = id;
-            state.millis.requestSent();
-            state.responseStatus.set("");
-
-            $.ajax({url: getAjaxUrl(), success: handleSuccess, error: handleError});
-        }
-
         state.currentDate = new Date();
-        
+
         draw(getCanvas());
 
         if (shouldUpdate()) {
@@ -195,5 +206,7 @@ function init(id, direction) {
     state.stationId = id;
     setInterval(run, 256);
     window.onresize = handleResize;
+    var canvas = getCanvas();
+    canvas.ontouchstart = touchHandler.handleTouch;
     handleResize();
 }

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="HandheldFriendly" content="true"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no"/>
     <title>canvas</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/main.css"/>

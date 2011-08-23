@@ -21,6 +21,8 @@ function tests() {
         }
     }
 
+    module("canvas");
+
     test("draw no departures", function() {
         var calls = 0;
         var contextMock = {
@@ -180,6 +182,20 @@ function tests() {
         var msg = "should be scaled according to width of longest line if it doesn't fit horizontally: " + r;
         ok(r > 70, msg);
         ok(r < 80, msg);
+    });
+
+    test("touch", function() {
+        ok(touchHandler);
+        equals(touchHandler.x, 11);
+        var mock = {
+            touches: [{
+                clientX: 1,
+                clientY: 2
+            }],
+            preventDefault: nop
+        };
+        touchHandler.handleTouch(mock);
+        equals(touchHandler.x, 1);
     });
 
 }
