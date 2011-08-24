@@ -2,17 +2,17 @@ package se.cygni.ruhe.sl;
 
 public class Departure {
     private String time;
-    private String fullDestination;
+    private StationName destination;
     private boolean delayed;
     private String direction;
 
     public String toString() {
-        return time + " " + fullDestination;
+        return time + " " + destination;
     }
 
     public Departure(String time, String fullDestination, boolean delayed, String direction) {
         this.time = time;
-        this.fullDestination = fullDestination;
+        this.destination = new StationName(fullDestination);
         this.delayed = delayed;
         this.direction = direction;
     }
@@ -22,7 +22,7 @@ public class Departure {
     }
 
     public String getFullDestination() {
-        return fullDestination;
+        return destination.getFull();
     }
 
     public boolean isDelayed() {
@@ -38,29 +38,7 @@ public class Departure {
     }
 
     public String getDestination() {
-        String r = fullDestination;
-
-        if (r.endsWith("amn")) {
-            r = r.substring(0, r.length() - 3);
-        }
-
-        if (r.startsWith("Väster")) {
-            r = "V:" + r.substring(6, r.length());
-        }
-
-        if (r.startsWith("Upplands ")) {
-            r = r.substring(9, r.length());
-        }
-
-        int tälje = r.indexOf("tälje");
-        if (tälje != -1) {
-            StringBuilder b = new StringBuilder();
-            b.append(r.substring(0, tälje));
-            b.append("t:e");
-            b.append(r.substring(tälje + 5));
-            r = b.toString();
-        }
-
-        return r;
+        return destination.getShort();
     }
+
 }
