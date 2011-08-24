@@ -207,6 +207,6 @@ function init(id, direction) {
     setInterval(run, 256);
     window.onresize = handleResize;
     var canvas = getCanvas();
-    canvas.ontouchstart = touchHandler.handleTouch;
+    canvas.ontouchstart = function (event) { return touchHandler.handleTouch(event)};
     handleResize();
 }

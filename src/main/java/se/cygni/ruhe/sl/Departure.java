@@ -38,14 +38,29 @@ public class Departure {
     }
 
     public String getDestination() {
-        if (fullDestination.endsWith("amn")) {
-            return fullDestination.substring(0, fullDestination.length() - 3);
+        String r = fullDestination;
+
+        if (r.endsWith("amn")) {
+            r = r.substring(0, r.length() - 3);
         }
 
-        if (fullDestination.startsWith("Väster")) {
-            return "V:" + fullDestination.substring(6, fullDestination.length());
+        if (r.startsWith("Väster")) {
+            r = "V:" + r.substring(6, r.length());
         }
 
-        return fullDestination;
+        if (r.startsWith("Upplands ")) {
+            r = r.substring(9, r.length());
+        }
+
+        int tälje = r.indexOf("tälje");
+        if (tälje != -1) {
+            StringBuilder b = new StringBuilder();
+            b.append(r.substring(0, tälje));
+            b.append("t:e");
+            b.append(r.substring(tälje + 5));
+            r = b.toString();
+        }
+
+        return r;
     }
 }
