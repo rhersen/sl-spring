@@ -9,18 +9,22 @@ function getMillisFromMidnight(hhmm) {
 }
 
 function getCountdown(hhmm, currentTimeMillis)   {
-    function formatSeconds(seconds) {
-        var r = seconds.toFixed(1).toString();
-
-        if (r.length < 4) {
-            return "0" + r;
-        }
-
-        return r;
+    if (hhmm.indexOf(":") === -1) {
+        return "?";
     }
 
-    function getDiff(hhmm, currentTimeMillis) {
-        function getDiffMillis(hhmm, currentTimeMillis) {
+    return getDiff();
+
+    function getDiff() {
+        var diffMillis = getDiffMillis();
+        var isNegative = diffMillis < 0;
+        var diffSeconds = (isNegative ? -diffMillis : diffMillis) / 1000;
+        var seconds = diffSeconds % 60;
+        var diffMinutes = (diffSeconds - seconds) / 60;
+        var sign = isNegative ? "-" : "";
+        return sign + diffMinutes + ":" + formatSeconds(seconds);
+
+        function getDiffMillis() {
             var diffMillis = getMillisFromMidnight(hhmm) - currentTimeMillis % MILLIS_PER_DAY;
             if (diffMillis < -1e6) {
                 diffMillis += MILLIS_PER_DAY
@@ -28,20 +32,18 @@ function getCountdown(hhmm, currentTimeMillis)   {
             return diffMillis;
         }
 
-        var diffMillis = getDiffMillis(hhmm, currentTimeMillis);
-        var isNegative = diffMillis < 0;
-        var diffSeconds = (isNegative ? -diffMillis : diffMillis) / 1000;
-        var seconds = diffSeconds % 60;
-        var diffMinutes = (diffSeconds - seconds) / 60;
-        var sign = isNegative ? "-" : "";
-        return sign + diffMinutes + ":" + formatSeconds(seconds);
-    }
+        function formatSeconds(seconds) {
+            return padZero(seconds.toFixed(1));
 
-    if (hhmm.indexOf(":") === -1) {
-        return "?";
+            function padZero(r) {
+                if (r.length < 4) {
+                    return "0" + r;
+                } else {
+                    return r;
+                }
+            }
+        }
     }
-
-    return getDiff(hhmm, currentTimeMillis);
 }
 
 function getMillisSinceRefresh(currentDate, refreshMillis) {
