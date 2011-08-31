@@ -113,7 +113,7 @@ function setStation(id) {
     millis.requestSent();
     responseStatus.set("", $("#bg"));
 
-    $.ajax({url: getAjaxUrl(), success: handleSuccess, error: handleError});
+    $.ajax({url: getAjaxUrl(), cache: false, success: handleSuccess, error: handleError});
 }
 
 function updateCountdown(currentDate) {

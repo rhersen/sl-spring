@@ -183,7 +183,7 @@ function init(id, direction) {
             state.millis.requestSent();
             state.responseStatus.set("");
 
-            $.ajax({url: getAjaxUrl(), success: handleSuccess, error: handleError});
+            $.ajax({url: getAjaxUrl(), cache: false, success: handleSuccess, error: handleError});
 
             function getAjaxUrl() {
                 return "departures?id=" + state.stationId + "&direction=" + 'ns';
