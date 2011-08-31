@@ -29,6 +29,8 @@
             <a href="${pageContext.request.contextPath}/station/canvas?id=9529&direction=ns">Älvsjö</a></li>
         <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9702&direction=s">Jakobsberg</a>
             <a href="${pageContext.request.contextPath}/station/canvas?id=9702&direction=s">Jakobsberg</a></li>
+        <li><a href="${pageContext.request.contextPath}/station/dynamic?id=9730&direction=s">Haninge</a>
+            <a href="${pageContext.request.contextPath}/station/canvas?id=9730&direction=s">Haninge</a></li>
     </ol>
     <h2 id="qunit-userAgent"></h2>
     <ol id="qunit-tests"></ol>
