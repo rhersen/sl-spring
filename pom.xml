@@ -143,6 +143,9 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <sourceIncludes>
+                        <include>timecalc.js</include>
+                    </sourceIncludes>
                     <jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir>
                     <!-- configuration properties will go here -->
                 </configuration>
