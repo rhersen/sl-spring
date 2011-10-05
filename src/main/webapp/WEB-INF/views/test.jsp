@@ -4,13 +4,13 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <script src="${pageContext.request.contextPath}/resources/jquery-1.6.1.min.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery-1.6.1.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/qunit.css" type="text/css" media="screen" />
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/qunit.js"></script>
 
-      <script type="text/javascript" src="${pageContext.request.contextPath}/resources/timecalc.js"></script>
-      <script type="text/javascript" src="${pageContext.request.contextPath}/resources/station.js"></script>
-      <script type="text/javascript" src="${pageContext.request.contextPath}/resources/canvas.js"></script>
+      <script type="text/javascript" src="${pageContext.request.contextPath}/js/timecalc.js"></script>
+      <script type="text/javascript" src="${pageContext.request.contextPath}/js/station.js"></script>
+      <script type="text/javascript" src="${pageContext.request.contextPath}/js/canvas.js"></script>
       <script type="text/javascript" src="${pageContext.request.contextPath}/resources/timecalc-test.js"></script>
       <script type="text/javascript" src="${pageContext.request.contextPath}/resources/station-test.js"></script>
       <script type="text/javascript" src="${pageContext.request.contextPath}/resources/canvas-test.js"></script>
