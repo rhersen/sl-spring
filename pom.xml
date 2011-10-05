@@ -109,6 +109,7 @@
                     <source>1.5</source>
                     <target>1.5</target>
                     <showWarnings>true</showWarnings>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
             <plugin>
