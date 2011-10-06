@@ -46,9 +46,12 @@ function getCountdown(hhmm, currentTimeMillis)   {
     }
 }
 
+function getCurrentTimeMillis(currentDate) {
+    return currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
+}
+
 function getMillisSinceRefresh(currentDate, refreshMillis) {
-    var currentMillis = currentDate.getTime() - (currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE);
-    var currentMillisToday = currentMillis % MILLIS_PER_DAY;
+    var currentMillisToday = getCurrentTimeMillis(currentDate) % MILLIS_PER_DAY;
     var millis = currentMillisToday - refreshMillis;
 
     if (millis < 0) {
@@ -56,14 +59,6 @@ function getMillisSinceRefresh(currentDate, refreshMillis) {
     }
 
     return millis;
-}
-
-function previous() {
-    setStation(stationId + 1);
-}
-
-function next() {
-    setStation(stationId - 1);
 }
 
 function isOutdated(millisSinceRefresh, millisSinceRequest, millisSinceResponse) {

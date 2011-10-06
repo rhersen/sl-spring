@@ -94,11 +94,11 @@ function setStation(id) {
             return;
         }
 
-    if (getMillisSinceUpdate(data.updated) > 200000) {
-        responseStatus.set("expired", $("#bg"));
-    } else {
-        responseStatus.set(status, $("#bg"));
-    }
+        if (getMillisSinceUpdate(data.updated) > 200000) {
+            responseStatus.set("expired", $("#bg"));
+        } else {
+            responseStatus.set(status, $("#bg"));
+        }
 
         updatePage(data);
     }
@@ -116,11 +116,17 @@ function setStation(id) {
     $.ajax({url: getAjaxUrl(), cache: false, success: handleSuccess, error: handleError});
 }
 
-function updateCountdown(currentDate) {
-    var currentTimeMillis = currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
+function previous() {
+    setStation(stationId + 1);
+}
 
+function next() {
+    setStation(stationId - 1);
+}
+
+function updateCountdown(currentDate) {
     $("#departures tr").each(function () {
-        var countdown = getCountdown($(this).children(':first').html(), currentTimeMillis);
+        var countdown = getCountdown($(this).children(':first').html(), getCurrentTimeMillis(currentDate));
         $(this).children(':last').html(countdown);
     });
 }

@@ -61,10 +61,6 @@ function getMillisSinceUpdate() {
     return getMillisSinceRefresh(state.currentDate, getMillisFromMidnight(state.updated));
 }
 
-function getCurrentTimeMillis(currentDate) {
-    return currentDate.getTime() - currentDate.getTimezoneOffset() * MILLIS_PER_MINUTE;
-}
-
 function getLineHeight(canvas) {
     var c = canvas.getContext('2d');
 

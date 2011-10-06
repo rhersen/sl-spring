@@ -11,6 +11,14 @@ describe('timecalc', function() {
         return mock;
     }
 
+    it("should return time if timezoneOffset is zero", function() {
+        expect(getCurrentTimeMillis(createTimeMock(12344, 0))).toEqual(12344);
+    });
+
+    it("should return zero if timezoneOffset is same as time", function() {
+        expect(getCurrentTimeMillis(createTimeMock(60 * 60 * 1000, 60))).toEqual(0);
+    });
+
     it("should count from midnight", function() {
         expect(getCountdown("00:01", 0)).toEqual("1:00.0");
         expect(getCountdown("0:02", 0)).toEqual("2:00.0");
@@ -54,7 +62,7 @@ describe('timecalc', function() {
         expect(getCountdown("00:03", 200000)).toEqual("-0:20.0");
     });
 
-    it("regression", function() {
+    it("should handle more than one hour difference", function() {
         expect(getCountdown("00:01", 82000000)).toEqual("74:20.0");
     });
 
@@ -63,7 +71,7 @@ describe('timecalc', function() {
         expect(getCountdown("11:00", 36000000)).toEqual("60:00.0");
     });
 
-    it("getCountdown with invalid time", function() {
+    it("should return question mark if time is invalid", function() {
         expect(getCountdown("", 300000)).toEqual("?");
     });
 
