@@ -14,27 +14,27 @@
       <script type="text/javascript" src="${pageContext.request.contextPath}/js/station.js" ></script>
   </head>
 
-  <body id="bg" onload="init(${id}, '${direction}');">
+  <body id="bg" onload="station = createStation(${id}, '${direction}');">
   <div>
-      <span id="updated" onclick="next();">updated</span>
+      <span id="updated" onclick="station.next();">updated</span>
       &nbsp;
-      <span id="station" onclick="previous();">
+      <span id="station" onclick="station.previous();">
           station
       </span>
   </div>
 
   <div>
-      <span onclick="setStation(9510);">K</span>
-      <span onclick="setStation(9001);">C</span>
-      <span onclick="setStation(9530);">S</span>
-      <span onclick="setStation(9531);">Å</span>
-      <span onclick="setStation(9529);">Ä</span>
-      <span onclick="setStation(9528);">V</span>
-      <span onclick="setStation(9527);">H</span>
-      <span onclick="setStation(9526);">F</span>
-      <span onclick="setStation(9525);">T</span>
-      <span onclick="setStation(9524);">M</span>
-      <span onclick="setStation(9523);">R</span>
+      <span onclick="station.setStation(9510);">K</span>
+      <span onclick="station.setStation(9001);">C</span>
+      <span onclick="station.setStation(9530);">S</span>
+      <span onclick="station.setStation(9531);">Å</span>
+      <span onclick="station.setStation(9529);">Ä</span>
+      <span onclick="station.setStation(9528);">V</span>
+      <span onclick="station.setStation(9527);">H</span>
+      <span onclick="station.setStation(9526);">F</span>
+      <span onclick="station.setStation(9525);">T</span>
+      <span onclick="station.setStation(9524);">M</span>
+      <span onclick="station.setStation(9523);">R</span>
   </div>
 
   <h3 id="ago">ago</h3>

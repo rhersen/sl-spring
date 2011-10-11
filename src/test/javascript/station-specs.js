@@ -1,5 +1,7 @@
 describe('station', function() {
 
+    var station = createStation();
+
     it("set status", function() {
         setFixtures('<div id="bg"></div>');
 
@@ -34,33 +36,33 @@ describe('station', function() {
     it("getDirection", function() {
         setFixtures('<label for="northbound">N</label><input type="checkbox" id="northbound" value="val" /> <label for="southbound">S</label><input type="checkbox" id="southbound" value="val" />');
 
-        expect(getDirection()).toEqual("ns");
+        expect(station.getDirection()).toEqual("ns");
         $("#northbound").prop("checked", true);
-        expect(isNorthChecked()).toBeTruthy();
-        expect(!isSouthChecked()).toBeTruthy();
-        expect(getDirection()).toEqual("n");
-        expect(isNorthChecked()).toBeTruthy();
+        expect(station.isNorthChecked()).toBeTruthy();
+        expect(!station.isSouthChecked()).toBeTruthy();
+        expect(station.getDirection()).toEqual("n");
+        expect(station.isNorthChecked()).toBeTruthy();
         $("#southbound").prop("checked", true);
-        expect(isSouthChecked()).toBeTruthy();
-        expect(getDirection()).toEqual("ns");
+        expect(station.isSouthChecked()).toBeTruthy();
+        expect(station.getDirection()).toEqual("ns");
         $("#northbound").prop("checked", false);
-        expect(!isNorthChecked()).toBeTruthy();
-        expect(isSouthChecked()).toBeTruthy();
-        expect(getDirection()).toEqual("s");
+        expect(!station.isNorthChecked()).toBeTruthy();
+        expect(station.isSouthChecked()).toBeTruthy();
+        expect(station.getDirection()).toEqual("s");
     });
 
     it("setDirection", function() {
         setFixtures('<label for="northbound">N</label><input type="checkbox" id="northbound" value="val" /> <label for="southbound">S</label><input type="checkbox" id="southbound" value="val" />');
 
-        setDirection('n');
-        expect(isNorthChecked()).toBeTruthy();
-        expect(!isSouthChecked()).toBeTruthy();
-        setDirection('s');
-        expect(!isNorthChecked()).toBeTruthy();
-        expect(isSouthChecked()).toBeTruthy();
-        setDirection('ns');
-        expect(isNorthChecked()).toBeTruthy();
-        expect(isSouthChecked()).toBeTruthy();
+        station.setDirection('n');
+        expect(station.isNorthChecked()).toBeTruthy();
+        expect(!station.isSouthChecked()).toBeTruthy();
+        station.setDirection('s');
+        expect(!station.isNorthChecked()).toBeTruthy();
+        expect(station.isSouthChecked()).toBeTruthy();
+        station.setDirection('ns');
+        expect(station.isNorthChecked()).toBeTruthy();
+        expect(station.isSouthChecked()).toBeTruthy();
     });
 
     it("updateCountdown", function() {
@@ -72,7 +74,7 @@ describe('station', function() {
         var countdown1 = $('#departures tr:first td:last');
         var countdown2 = $('#departures tr:last td:last');
         expect(countdown1.html()).toEqual("countdown1");
-        updateCountdown(now);
+        station.updateCountdown(now);
         expect(countdown1.html()).toEqual("0:20.0");
         expect(countdown2.html()).toEqual("4:20.0");
     });
@@ -83,7 +85,7 @@ describe('station', function() {
         var rows;
         rows = $('#departures tr');
         expect(rows.size()).toEqual(2);
-        updatePage({"updated":"22:10","stationName":"Tullinge","departures":[
+        station.updatePage({"updated":"22:10","stationName":"Tullinge","departures":[
                     {"time":"22:26","destination":"Märsta","delayed":false,"direction":"n","millis":1560000},
                     {"time":"22:56","destination":"Märsta","delayed":false,"direction":"n","millis":3360000},
                     {"time":"23:28;","destination":"Märsta","delayed":true,"direction":"n","millis":1560000}
@@ -110,17 +112,17 @@ describe('station', function() {
             {"time":"00:07","destination":"Södertälje hamn","delayed":true,"direction":"s"},
             {"time":"00:33","destination":"Södertälje hamn","delayed":false,"direction":"s"}
         ],"updated":"23:56","stationName":"Tullinge"};
-        updatePage(data);
+        station.updatePage(data);
         rows = $('#departures tr');
         expect(rows.size()).toEqual(5);
         $("#northbound").prop("checked", true);
         $("#southbound").prop("checked", false);
-        updatePage(data);
+        station.updatePage(data);
         rows = $('#departures tr');
         expect(rows.size()).toEqual(3);
         $("#northbound").prop("checked", false);
         $("#southbound").prop("checked", true);
-        updatePage(data);
+        station.updatePage(data);
         rows = $('#departures tr');
         expect(rows.size()).toEqual(2);
     });

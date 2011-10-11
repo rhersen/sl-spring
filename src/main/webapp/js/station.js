@@ -1,15 +1,11 @@
-var stationId = 9525;
-
 function createStatus() {
-    var that = {};
-
     var s = "n/a";
 
-    that.get = function () {
+    function get() {
         return s;
-    };
+    }
 
-    that.set = function (status, bg) {
+    function set(status, bg) {
         s = status;
 
         bg.removeClass("pending");
@@ -24,62 +20,54 @@ function createStatus() {
         } else {
             bg.addClass("error");
         }
-    };
-
-    return that;
-}
-
-function isNorthChecked() {
-    return $("#northbound").prop("checked") || !$("#southbound").prop("checked");
-}
-
-function isSouthChecked() {
-    return $("#southbound").prop("checked") || !$("#northbound").prop("checked");
-}
-
-function getDirection() {
-    return (isNorthChecked() ? "n" : "") + (isSouthChecked() ? "s" : "");
-}
-
-function setDirection(direction) {
-    $("#northbound").prop("checked", /n/.test(direction));
-    $("#southbound").prop("checked", /s/.test(direction));
-}
-
-var millis;
-var responseStatus = createStatus();
-var updated = "";
-
-function updatePage(data) {
-    var nChecked = isNorthChecked();
-    var sChecked = isSouthChecked();
-
-    function getDelayed(delayed) {
-        return delayed ? "delayed" : "punctual";
     }
-    $("#station").html(data.stationName);
 
-    updated = data.updated;
-    $("#updated").html(updated);
+    return {
+        get: get,
+        set: set
+    };
+}
 
-    $('#departures tr').remove();
+function createStation(id, direction) {
+   var stationId = 9525;
+   var millis = undefined;
+   var responseStatus = createStatus();
+   var updated = "";
 
-    $(data.departures).each(function (i, departure) {
-        var row;
-        if ((nChecked && departure.direction === 'n') ||
-                (sChecked && departure.direction === 's')) {
-            row = $('<tr/>').appendTo($('#departures'));
-            row.addClass(getDelayed(departure.delayed));
-            $('<td/>').appendTo(row).html(departure.time);
-            $('<td/>').appendTo(row).html(departure.destination);
-            $('<td/>').appendTo(row).html('countdown').addClass('countdown');
+    stationId = id;
+    setDirection(direction);
+    updateClock();
+    setInterval(updateClock, 256);
+    function updatePage(data) {
+        var nChecked = isNorthChecked();
+        var sChecked = isSouthChecked();
+
+        function getDelayed(delayed) {
+            return delayed ? "delayed" : "punctual";
         }
-    });
-}
+        $("#station").html(data.stationName);
 
-function getMillisSinceUpdate(updated) {
-    return getMillisSinceRefresh(new Date(), getMillisFromMidnight(updated));
-}
+        updated = data.updated;
+        $("#updated").html(updated);
+
+        $('#departures tr').remove();
+
+        $(data.departures).each(function (i, departure) {
+            var row;
+            if ((nChecked && departure.direction === 'n') ||
+                    (sChecked && departure.direction === 's')) {
+                row = $('<tr/>').appendTo($('#departures'));
+                row.addClass(getDelayed(departure.delayed));
+                $('<td/>').appendTo(row).html(departure.time);
+                $('<td/>').appendTo(row).html(departure.destination);
+                $('<td/>').appendTo(row).html('countdown').addClass('countdown');
+            }
+        });
+    }
+
+   function getMillisSinceUpdate(updated) {
+        return getMillisSinceRefresh(new Date(), getMillisFromMidnight(updated));
+    }
 
 function setStation(id) {
     function getAjaxUrl() {
@@ -116,12 +104,29 @@ function setStation(id) {
     $.ajax({url: getAjaxUrl(), cache: false, success: handleSuccess, error: handleError});
 }
 
-function previous() {
-    setStation(stationId + 1);
+    function previous() {
+        setStation(stationId + 1);
+    }
+
+    function next() {
+        setStation(stationId - 1);
+    }
+
+function isNorthChecked() {
+    return $("#northbound").prop("checked") || !$("#southbound").prop("checked");
 }
 
-function next() {
-    setStation(stationId - 1);
+function isSouthChecked() {
+    return $("#southbound").prop("checked") || !$("#northbound").prop("checked");
+}
+
+function getDirection() {
+    return (isNorthChecked() ? "n" : "") + (isSouthChecked() ? "s" : "");
+}
+
+function setDirection(direction) {
+    $("#northbound").prop("checked", /n/.test(direction));
+    $("#southbound").prop("checked", /s/.test(direction));
 }
 
 function updateCountdown(currentDate) {
@@ -150,11 +155,16 @@ function updateClock() {
         setStation(stationId);
     }
 }
-
-//noinspection JSUnusedGlobalSymbols
-function init(id, direction) {
-    stationId = id;
-    setDirection(direction);
-    updateClock();
-    setInterval(updateClock, 256);
+    return {
+    getDirection: getDirection,
+    setDirection: setDirection,
+    setStation: setStation,
+    previous: previous,
+    next: next,
+    isNorthChecked: isNorthChecked,        //todo: only called from tests
+    isSouthChecked: isSouthChecked,        //todo: only called from tests
+    updateClock: updateClock,
+    updateCountdown: updateCountdown,
+    updatePage: updatePage
+};
 }
