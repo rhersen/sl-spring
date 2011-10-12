@@ -66,26 +66,29 @@ function isOutdated(millisSinceRefresh, millisSinceRequest, millisSinceResponse)
 }
 
 function createMillis() {
-    var that = {};
-
     var requestMillis = 0;
     var responseMillis = 0;
 
-    that.getRequest = function () {
+    function getRequest() {
         return new Date().getTime() - requestMillis;
-    };
+    }
 
-    that.getResponse = function () {
+    function getResponse() {
         return new Date().getTime() - responseMillis;
-    };
+    }
 
-    that.requestSent = function () {
+    function requestSent() {
         requestMillis = new Date().getTime();
-    };
+    }
 
-    that.responseReceived = function () {
+    function responseReceived() {
         responseMillis = new Date().getTime();
-    };
+    }
 
-    return that;
+    return {
+        getRequest: getRequest,
+        getResponse: getResponse,
+        requestSent: requestSent,
+        responseReceived: responseReceived
+    };
 }

@@ -17,19 +17,18 @@ var state = {
     millis: createMillis(),
     currentDate: new Date(),
     responseStatus: function () {
-        var that = {};
 
         var s = "n/a";
 
-        that.get = function () {
+        function get() {
             return s;
-        };
+        }
 
-        that.set = function (status) {
+        function set(status) {
             s = status;
-        };
+        }
 
-        that.getBg = function () {
+        function getBg() {
             if (s === "success") {
                 return '#355';
             }
@@ -43,9 +42,12 @@ var state = {
             }
 
             return '#000';
-        };
+        }
 
-        return that;
+        return {
+            getBg: getBg,
+            set: set
+        };
     }()
 };
 
