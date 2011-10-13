@@ -34,10 +34,13 @@ function createStation(id, direction) {
     var responseStatus = createStatus();
     var updated = "";
 
-    stationId = id;
-    setDirection(direction);
-    updateClock();
-    setInterval(updateClock, 256);
+    if (id) {
+        stationId = id;
+        setDirection(direction);
+        updateClock();
+        setInterval(updateClock, 256);
+    }
+    
     function updatePage(data) {
         var nChecked = isNorthChecked();
         var sChecked = isSouthChecked();
