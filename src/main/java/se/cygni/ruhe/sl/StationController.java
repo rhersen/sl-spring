@@ -1,5 +1,6 @@
 package se.cygni.ruhe.sl;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class StationController {
     @RequestMapping(value = "/static", method = RequestMethod.GET)
     public String getStatic(@RequestParam String id, Model model) throws IOException, SAXException {
         URL url = new URL("http://mobilrt.sl.se/?tt=TRAIN&SiteId=" + id);
-        Departures departures = parser.parse(new InputStreamReader(url.openStream(), "UTF-8"));
+        Departures departures = parser.parse(IOUtils.toString(url.openStream(), "UTF-8"));
 
         model.addAttribute("departures", departures);
         return "static";
@@ -56,7 +55,7 @@ public class StationController {
     Departures getJson(@RequestParam String id) throws IOException, SAXException {
         try {
             URL url = new URL("http://mobilrt.sl.se/?tt=TRAIN&SiteId=" + id);
-            return parser.parse(new InputStreamReader(url.openStream(), "UTF-8"));
+            return parser.parse(IOUtils.toString(url.openStream(), "UTF-8"));
         } catch (IOException e) {
             return createFakeDepartures();
         }

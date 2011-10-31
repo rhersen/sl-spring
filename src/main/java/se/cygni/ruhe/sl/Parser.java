@@ -9,7 +9,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.regex.Matcher;
@@ -21,9 +21,10 @@ public class Parser {
     private final Pattern updatedAt = Pattern.compile(".*Uppdaterat kl (.?.:..).*", Pattern.DOTALL);
     private final Pattern departureTime = Pattern.compile(".*(..:..).*", Pattern.DOTALL);
 
-    public Departures parse(InputStreamReader html) throws IOException, SAXException {
+    public Departures parse(String html) throws IOException, SAXException {
+        int body = html.indexOf("<body>");
         DOMParser neko = new DOMParser();
-        neko.parse(new InputSource(html));
+        neko.parse(new InputSource(new StringReader(body == -1 ? html : html.substring(body))));
         Node startDiv = getStartDiv(neko);
         Node updated = startDiv.getNextSibling().getFirstChild();
         String when = getMatch(updated, updatedAt);
@@ -41,10 +42,25 @@ public class Parser {
 
     private Node getStartDiv(DOMParser neko) {
         Document document = neko.getDocument();
-        return document.getFirstChild().getNextSibling().getFirstChild().getNextSibling().getFirstChild()
-                .getFirstChild().getNextSibling().getNextSibling().getNextSibling()
-                .getFirstChild().getFirstChild().getFirstChild().getNextSibling().getNextSibling().getFirstChild()
-                .getNextSibling().getNextSibling().getNextSibling().getFirstChild();
+        Node html1 = document.getFirstChild();
+        Node html2 = html1.getNextSibling();
+        Node head = html1.getFirstChild();
+        Node body = head.getNextSibling();
+        Node form = body.getFirstChild();
+        Node div = form.getFirstChild();
+        Node div2 = div.getNextSibling();
+        Node div3 = div2.getNextSibling();
+        Node div4 = div3.getNextSibling();
+        Node div5 = div4.getFirstChild();
+        Node div6 = div5.getFirstChild();
+        Node div7 = div6.getFirstChild();
+        Node div8 = div7.getNextSibling();
+        Node div9 = div8.getNextSibling();
+        Node comment = div9.getFirstChild();
+        Node comment1 = comment.getNextSibling();
+        Node comment2 = comment1.getNextSibling();
+        Node div0 = comment2.getNextSibling();
+        return div0.getFirstChild();
     }
 
     private Node findTrain(Node realtimeResult) {
@@ -56,7 +72,7 @@ public class Parser {
                 if (b.getNodeName().equals("B")) {
                     String textContent = b.getTextContent();
                     if (textContent.contains("Pendel")) {
-                        return b;
+                        return p;
                     }
                 }
             }
@@ -82,11 +98,11 @@ public class Parser {
     }
 
     private Collection<String[]> getOneHalfOfTheDepartures(Node train) {
-        return getDepartures(train.getNextSibling().getNextSibling());
+        return getDepartures(train.getNextSibling());
     }
 
     private Collection<String[]> getOtherHalfOfTheDepartures(Node train) {
-        return getDepartures(train.getNextSibling().getNextSibling().getNextSibling().getNextSibling());
+        return getDepartures(train.getNextSibling().getNextSibling().getNextSibling());
     }
 
     private boolean isNorthbound(Collection<String[]> departures) {
