@@ -2,7 +2,6 @@ package se.cygni.ruhe.sl;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -21,7 +20,7 @@ public class ParserTest {
         target = new Parser();
     }
 
-    @Ignore
+
     @Test
     public void testInvoke() throws Exception {
         Departures result = testParse("flemingsberg.html");
@@ -36,7 +35,7 @@ public class ParserTest {
         assertEquals("23:59", iterator.next().getTime());
     }
 
-    @Ignore
+
     @Test
     public void shouldHandleResultWithBothBusesAndTrains() throws Exception {
         Departures result = testParse("stuvsta.html");
@@ -51,7 +50,7 @@ public class ParserTest {
         assertEquals("23:05", iterator.next().getTime());
     }
 
-    @Ignore
+    
     @Test
     public void shouldHandleDelay() throws Exception {
         Departures result = testParse("delay.html");
@@ -90,7 +89,7 @@ public class ParserTest {
         assertEquals(0, departures.size());
     }
 
-    @Ignore
+
     @Test
     public void shouldHandleSpaceInStationName() throws Exception {
         Departures result = testParse("sodra.html");

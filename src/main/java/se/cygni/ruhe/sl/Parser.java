@@ -22,9 +22,8 @@ public class Parser {
     private final Pattern departureTime = Pattern.compile(".*(..:..).*", Pattern.DOTALL);
 
     public Departures parse(String html) throws IOException, SAXException {
-        int body = html.indexOf("<body>");
         DOMParser neko = new DOMParser();
-        neko.parse(new InputSource(new StringReader(body == -1 ? html : html.substring(body))));
+        neko.parse(new InputSource(skipToHead(html)));
         Node startDiv = getStartDiv(neko);
         Node updated = startDiv.getNextSibling().getFirstChild();
         String when = getMatch(updated, updatedAt);
@@ -40,11 +39,15 @@ public class Parser {
         return new Departures(when, where, getTrainDepartures(train));
     }
 
+    private StringReader skipToHead(String html) {
+        int body = html.indexOf("<body>");
+        return new StringReader(body == -1 ? html : html.substring(body));
+    }
+
     private Node getStartDiv(DOMParser neko) {
-        Document document = neko.getDocument();
-        Node html1 = document.getFirstChild();
-        Node html2 = html1.getNextSibling();
-        Node head = html1.getFirstChild();
+        Document doc = neko.getDocument();
+        Node html = doc.getFirstChild();
+        Node head = html.getFirstChild();
         Node body = head.getNextSibling();
         Node form = body.getFirstChild();
         Node div = form.getFirstChild();
@@ -98,11 +101,19 @@ public class Parser {
     }
 
     private Collection<String[]> getOneHalfOfTheDepartures(Node train) {
-        return getDepartures(train.getNextSibling());
+        Node sibling = train.getNextSibling();
+        if (sibling.getNodeType() != Node.ELEMENT_NODE) {
+            sibling = train.getFirstChild().getNextSibling().getNextSibling();
+        }
+        return getDepartures(sibling);
     }
 
     private Collection<String[]> getOtherHalfOfTheDepartures(Node train) {
-        return getDepartures(train.getNextSibling().getNextSibling().getNextSibling());
+        Node sibling = train.getNextSibling();
+        if (sibling.getNodeType() != Node.ELEMENT_NODE) {
+            sibling = train.getFirstChild().getNextSibling().getNextSibling();
+        }
+        return getDepartures(sibling.getNextSibling().getNextSibling());
     }
 
     private boolean isNorthbound(Collection<String[]> departures) {
