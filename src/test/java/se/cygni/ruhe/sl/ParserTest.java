@@ -81,6 +81,19 @@ public class ParserTest {
     }
 
     @Test
+    public void shouldHandleNew2() throws Exception {
+        Departures result = testParse("new2.html");
+        assertEquals("14:16", result.getUpdated());
+        assertTrue(result.getStationName().startsWith("Tullinge"));
+        Collection<Departure> departures = result.getDepartures();
+        assertEquals(8, departures.size());
+        Iterator<Departure> iterator = departures.iterator();
+        Departure departure = findSouthbound(iterator);
+        assertEquals("14:18", departure.getTime());
+        assertFalse("should not be delayed", departure.isDelayed());
+    }
+
+    @Test
     public void shouldNotCrashIfThereAreNoDepartures() throws Exception {
         Departures result = testParse("no-trains.html");
         assertEquals("0:50", result.getUpdated());

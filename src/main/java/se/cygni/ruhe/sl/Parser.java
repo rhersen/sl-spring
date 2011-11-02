@@ -31,6 +31,10 @@ public class Parser {
         Node train = findTrain(realtimeResult);
 
         if (train == null) {
+            train = findTrain(realtimeResult.getFirstChild());
+        }
+
+        if (train == null) {
             return new Departures(when, startDiv.getFirstChild().getTextContent());
         }
 
